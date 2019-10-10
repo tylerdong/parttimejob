@@ -1,0 +1,10 @@
+:root {
+  --background-color: 12px
+}
+body {
+  background-color: aliceblue;
+}
+
+.App {
+  display: flex;
+}
