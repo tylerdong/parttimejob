@@ -84,7 +84,13 @@ class MainLayOut extends Component{
             </Sider>
 
             <Layout className={collapsed ? style.mainContentCollapsed : style.mainContent}>
-                {(/Chrome/.test(navigator.userAgent))}
+                {(/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)
+                    ? '' : <Alert message='请使用google chrome浏览器' banner closable/>)}
+                <div className={style.header}>
+                    <div className={style.headerButton} onClick={this.toggle}>
+                        <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'}/>
+                    </div>
+                </div>
             </Layout>
         </Layout>)
     }
