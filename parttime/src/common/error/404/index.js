@@ -1,8 +1,8 @@
-import React, {Commonent} from "react"
-import {connect} from "react-redux"
-import { mapDispatchToProps } from "../../core/store"
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { mapDispatchToProps } from '../../core/store'
 
-class Error404 extends Commonent {
+class Error404 extends Component {
     // 如果有需要通过redux来维护的数据，在此处映射即可
     static  getStore = store => {
         return { appName: store.global.appName }

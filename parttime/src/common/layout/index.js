@@ -69,7 +69,7 @@ class MainLayOut extends Component{
     }
 
     render() {
-        const { routers } = this.props
+        const { routes } = this.props
         const { collapsed, userName } = this.state
         return (<Layout className={style.layout}>
             <Sider className={style.sidebar} trigger={null} collapsible collapsed={collapsed}>
@@ -90,8 +90,41 @@ class MainLayOut extends Component{
                     <div className={style.headerButton} onClick={this.toggle}>
                         <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'}/>
                     </div>
+                    <div className={style.leftWrapper}>{this.topMenu()}</div>
+                    <div className={style.rightWrapper}>
+                        <Dropdown placement='bottomCenter' overlay={<Menu onClick={this.logout}>
+                            <MenuItems key='detail'>详情</MenuItems>
+                            <MenuItems key='logout'>退出登录</MenuItems>
+                        </Menu>}>
+                            <span><Icon type='user'/>{userName}</span>
+                        </Dropdown>
+                    </div>
                 </div>
+                <Layout style={{ padding: '0 24px 24px' }}>
+                    <Switch>
+                        {
+                            routes.map((route, index) => {
+                                return (<Route key={index}
+                                   path={route.path}
+                                   exact={route.exact}
+                                   render={(match) => {
+                                        return (route.path === '/' && route.path !== config.homeRoute)
+                                            ? <Redirect to={config.homeRoute}/>
+                                            : <div>
+                                                <Breadcrumb match={match} routes={routes}/>
+                                                <Content>
+                                                    <route.component match={match}/>
+                                                </Content>
+                                            </div>
+                                   }}
+                                />)
+                            })
+                        }
+                        <Route path='*' component={NotFound}/>
+                    </Switch>
+                </Layout>
             </Layout>
         </Layout>)
     }
 }
+export default MainLayOut
