@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import storeKit from 'storeKit'
+import { Button } from 'antd'
 
 // 注入redux
 @storeKit(store => {
   return {
-    appName: store.global.appName
+    appName: store.global.appName,
+    testKey: store.demoRedux.testKey
   }
 })
 class DemoRedux extends Component {
@@ -15,11 +17,25 @@ class DemoRedux extends Component {
   }
   componentDidMount() {
   }
+
+  changeAppName = () => {
+    this.props.actions.changeAppName('XXX管理系统')
+  }
+  changeTestKey = () => {
+    this.props.actions.demoRedux.changeTestKey('testValue1')
+  }
+
   render() {
     return (
       <div>
-        <p>本系统叫 {this.props.appName}，我是从store中获取的哦</p>
-        Hello, 当前页面名称叫 demoRedux!
+        <p>AppName: {this.props.appName}</p>
+        <p>TestKey: {this.props.testKey}</p>
+        <p>
+          <Button onClick={this.changeAppName}>更改AppName</Button>
+        </p>
+        <p>
+          <Button onClick={this.changeTestKey}>更改TestKey</Button>
+        </p>
       </div>
     )
   }

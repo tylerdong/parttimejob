@@ -4,8 +4,8 @@
  **/
 import Loadable from 'react-loadable'
 import Loading from 'components/Loading'
-export const home = Loadable({ loader: () => import('pages/home/index.js'), loading: Loading })
 export const demo = Loadable({ loader: () => import('pages/demo/index.js'), loading: Loading })
+export const home = Loadable({ loader: () => import('pages/home/index.js'), loading: Loading })
 export const user = Loadable({ loader: () => import('pages/user/index.js'), loading: Loading })
 export const demoAuth = Loadable({ loader: () => import('pages/demo/auth/index.js'), loading: Loading })
 export const demoRedux = Loadable({ loader: () => import('pages/demo/redux/index.js'), loading: Loading })

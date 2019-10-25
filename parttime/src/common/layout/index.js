@@ -21,9 +21,9 @@ class MainLayOut extends Component {
     this.state = { userName: userInfo.userName || '', collapsed: false }
   }
 
-  // 设置是否可手气
+  // 设置是否可收起
   toggle = () => {
-    this.setState({ collapsed: !this.state.collapse })
+    this.setState({ collapsed: !this.state.collapsed })
   }
 
   // 侧边菜单

@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import storeKit from 'storeKit'
+import { Link } from 'react-router-dom'
+import style from './index.pcss'
 
 // 注入redux
 @storeKit(store => {
@@ -18,8 +20,17 @@ class Demo extends Component {
   render() {
     return (
       <div>
-        <p>本系统叫 {this.props.appName}，我是从store中获取的哦</p>
-        Hello, 当前页面名称叫 demo!
+        <ul className={style.demos}>
+          <li>
+            <Link to={'/demo/redux'}>1.Redux使用方法</Link>
+          </li>
+          <li>
+            <Link to={'/demo/auth'}>2.Auth使用方法</Link>
+          </li>
+          <li>
+            <Link to={'/demo/menutip'}>3.侧边菜单栏使用方法</Link>
+          </li>
+        </ul>
       </div>
     )
   }
