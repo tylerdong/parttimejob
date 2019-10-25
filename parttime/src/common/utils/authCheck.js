@@ -4,8 +4,9 @@
  * 为key的简单对象
  * */
 import store from 'core/store'
+
 export default code => {
-    let state = store.getState()
-    let permission = state.global.appInitData.permission
-    return permission && !!permission[code]
+  let state = store.getState()
+  let permission = state.global.appInitData.permission
+  return permission && !!permission[code]
 }

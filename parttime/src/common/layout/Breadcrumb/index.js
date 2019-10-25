@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Breadcrumb } from "antd"
+import { Breadcrumb } from 'antd'
 import config from 'config'
 import style from './style.pcss'
 
@@ -17,13 +17,25 @@ class App extends Component {
     this.createBreadcrumbItems(path)
   }
 
+  resolvePath(path, resolveRoutes) {
+    let route = this.props.routes.find(route => {
+      return route.path === path
+    })
+    let parentPath = route.parentPath
+    resolveRoutes.unshift(route)
+    if (parentPath) {
+      return this.resolvePath(parentPath, resolveRoutes)
+    }
+    return resolveRoutes
+  }
+
   createBreadcrumbItems(path) {
     let resolveRoutes = []
     resolveRoutes = this.resolvePath(path, resolveRoutes)
     let breadcrumbItems = resolveRoutes.map((resolveRoute, index, routes) => {
       return this.createBreadcrumbItem(resolveRoute, index, routes)
     })
-    this.setState({breadcrumbItems})
+    this.setState({ breadcrumbItems })
   }
 
   replacePath(path, url) {

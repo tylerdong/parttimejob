@@ -117,7 +117,11 @@
     "new-parens": 2,
     // new的构造函数必须带参数
     "object-curly-spacing": [
-      "never"
+      2,
+      "always",
+      {
+        "objectsInObjects": false
+      }
     ],
     // 对象{}前后有空格, 对象内的对象例外
     "no-array-constructor": 2,
