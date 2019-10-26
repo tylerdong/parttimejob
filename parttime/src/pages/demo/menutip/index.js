@@ -18,8 +18,33 @@ class DemoMenutip extends Component {
   render() {
     return (
       <div>
-        <p>本系统叫 {this.props.appName}，我是从store中获取的哦</p>
-        Hello, 当前页面名称叫 demoMenutip!
+        <p>侧边菜单栏的配置有两种方式：</p>
+        <p>1.如果无需按照权限来动态生成，则仅需在config.js中配置menus参数即可</p>
+        <p>2.如果需要按照权限来动态生成，则需要提供一个getMenus接口来返回menus</p>
+        <pre style={{ background: '#ddd' }}>
+          {
+            `
+            {
+              code: 0,
+              msg: '菜单获取成功',
+              data: [
+                {
+                  key: 'index',
+                  value: '首页',
+                  icon: 'home',
+                  url: '/'                
+                },
+                {
+                  key: 'user',
+                  values: '用户管理',
+                  icon: 'solution',
+                  url: '/user'
+                }
+              ]
+            }
+            `
+          }
+        </pre>
       </div>
     )
   }
