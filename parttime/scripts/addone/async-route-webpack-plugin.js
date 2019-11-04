@@ -15,7 +15,7 @@ AsyncRoutePlugin.prototype.apply = function (compiler) {
   let routeDir = path.join(__dirname, '../../src/common/core/router/')
   let routePath = path.join(routeDir, 'routes.js')
   let customRoutePath = path.join(routeDir, 'routes-custom.js')
-  compiler.plugin("compile", function () {
+  compiler.plugin('compile', function () {
     util.clearFileContent(routePath,
       [
         '本文件由系统自动生成，请勿更改',

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import storeKit from 'storeKit'
+import api from 'api'
 
 // 注入redux
 @storeKit(store => {
@@ -11,9 +12,13 @@ class User extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      userList: []
     }
   }
   componentDidMount() {
+    api.getUserList({ page: 1, pageSize: 10 }).then(res => {
+      console.log(res)
+    })
   }
   render() {
     return (
