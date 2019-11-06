@@ -12,7 +12,7 @@ export default (req, res, next) => {
   return {
     ret: 'success',
     code: 0,
-    msg: '接口提示信息',
+    msg: '接口提示信息1',
     data: data
   }
 }

@@ -25,19 +25,20 @@ for (let i = 0; i < 12; i++) {
 export default (req, res, next) => {
   // 模拟网络环境，延迟100ms返回
   sleep(100)
-  let [index, size, total] = [req.page, req.pageSize, dataList.length]
-  let totalPages = dataList.length % size === 0 ? (total / size) : Math.ceil(total / size)
-  let list = Mock.mock(dataList.slice(index * size, (index + 1) * size))
+  console.log(req)
+  // let [index, size, total] = [req.page, req.pageSize, dataList.length]
+  // let totalPages = dataList.length % size === 0 ? (total / size) : Math.ceil(total / size)
+  // let list = dataList.slice(index * size, (index + 1) * size)
   return {
-    ret: 'success',
+    success: true,
     code: 0,
     msg: '成功',
     data: {
       'pageIndex': req.page,
       'pageSize': req.pageSize,
-      'list': list,
-      'total': total,
-      'totalPages': totalPages
+      'list': dataList,
+      'total': 12,
+      'totalPages': 1
     }
   }
 }

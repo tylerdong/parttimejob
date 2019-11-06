@@ -31,7 +31,7 @@ vue init veryStarters/react-admin-starter my-project
 通过上面的演示，我们可以看到，只是创建了一个index.js文件，但是整个系统已经可以跑起来并显示一些界面信息，这得归功于整个脚手架
 的全自动模板和配置功能
 
-####1、自动路由
+####1、自动路由（启动后可以在侧边目录栏——帮助里查看更多细节）
 
 在常见的React脚手架中，配置前端路由是个必须要进行的重复性工作。但事实上，我们完全可以借鉴后端的路由分发（dispatch）概念，依据文件路径等
 外部约定来达到自动配置路由的目的。
@@ -55,13 +55,58 @@ react-redux巨量的模板代码时时刻刻在考验着开发者的耐性，为
 
 ####4、自动Mock
 在src/api/index.js中按照对应格式定义api之后，系统会自动在src/api/mock目录下创建对应的mock文件，填充mock文件中的data字段即可返回mock数据。
-本地mock的proxy配置在src/config中地proxyTable字段。默认情况下，本地mock服务运行在http://localhost:10086
+本地mock的proxy配置在src/rasConfig中地proxyTable字段。默认情况下，本地mock服务运行在http://localhost:10086
 
-####5、
+####5、接口环境切换与配置
+除了利用webpack-dev-server的proxyTable实现多环境接口切换功能之外，还可以通过配置方便地实现一个前端工程同时对接多个后端工程
 
+###6、权限管理
+作为后台系统来说，权限问题至关重要。RAS将系统权限分成如下几种类型，分别是接口，菜单，路由，组件，方法。
 
+接口权限直接由后端项目控制。
 
+菜单权限通过获取菜单接口getMenus由后端返回，理论上也是由后端负责控制，前端（包含嵌套）的渲染生成。
 
+除了上面两种类型之外，下面三种权限在RAS系统中通过装饰器@auth或者高价组件Auth来实现，从而避免对业务代码的侵入。
+
+A、路由权限：基于RAS系统的设定，pages下的每个index.js文件对应着一个页面，因此针对路由进行权限控制的装饰器实质上就是针对该页面组件的装饰器。
+```$xslt
+@auth({
+    code: 2, // 权限标识
+    type: 'route', // 装饰器类型，默认值，可省略
+    // 默认情况下，无权限路由自动跳转到/error/forbidden页；
+    // 如果向更改次默认设定，可以社会自本参数为true,然后在onReject中自行处理;
+    preventDefault: true,
+    onReject() {
+        return (
+            <Redirect to={'/error/forbidden'}>
+        )
+    }
+})
+class SomePage extends Component{
+}
+```
+
+B、组件权限：组件权限和路由权限基本一致，只是其type为component。下面是高阶组件的使用方式：
+```$xslt
+render() {
+    return (
+        <Auth authName={'uiModule1'}>
+            <div>有权限</div>
+        </Auth>
+    )
+}
+```
+
+C、方法权限：方法权限无需指定type类型，系统自动判断。具体的例子参考/demo/auth/index.js文件
+
+####7、代码拆分
+RAS系统按照路由对代码进行了拆分，也即pages下的每一个index.js文件都将生成一个单独的文件
+
+####8、脚手架升级
+由于RAS系统还处在不断的升级和优化之中，如何将脚手架最新的设定与功能同步到已经在开发的项目中是大家关注的重点。
+实际上，这个功能从一开始设计这个脚手架的时候就已经考虑到了。因此，RAS系统在设计上隔离了绝大部分脚手架代码与业务代码（除了部分配置性代码除外),
+并提供了yarn updateRAS 命令来实现整个脚手架的核心功能升级，同时也给出了极少部分需要手动升级的操作提示
 
 
 
