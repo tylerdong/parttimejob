@@ -15,7 +15,7 @@ for (let i = 0; i < 12; i++) {
     'id': Random.natural(1, 1000),
     'name': Random.name(),
     'email': Random.email(),
-    'thumb': Random.image('200x100'),
+    'thumb': Random.image('30X30'),
     'createTime': Random.datetime(),
     'updateTime': Random.datetime()
   }
@@ -25,7 +25,6 @@ for (let i = 0; i < 12; i++) {
 export default (req, res, next) => {
   // 模拟网络环境，延迟100ms返回
   sleep(100)
-  console.log(req)
   // let [index, size, total] = [req.page, req.pageSize, dataList.length]
   // let totalPages = dataList.length % size === 0 ? (total / size) : Math.ceil(total / size)
   // let list = dataList.slice(index * size, (index + 1) * size)

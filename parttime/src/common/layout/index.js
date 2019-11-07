@@ -101,7 +101,7 @@ class MainLayOut extends Component {
             </Dropdown>
           </div>
         </div>
-        <Layout style={{ padding: '0 24px 24px' }}>
+        <Layout style={{ margin: '5px', padding: '5px', backgroundColor: '#FFFFFF' }}>
           <Switch>
             {
               routes.map((route, index) => {

@@ -1,8 +1,8 @@
 export default {
   // 应用名称
-  appName: 'Mobile交易版系统',
+  appName: '网站后台',
   // 子名称
-  subName: 'H5交易版',
+  subName: '后台',
   // 首页路由
   homeRoute: '/',
   // 是否开启权限校验，默认false

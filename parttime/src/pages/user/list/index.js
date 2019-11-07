@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import storeKit from 'storeKit'
 import api from 'api'
-import { userTableColumn } from './../../columns'
+import { userTableColumn } from './../../../columns'
 import { Table } from 'antd'
-import SearchComp from './../../components/searchComp'
+import SearchComp from './../../../components/searchComp'
 
 // 注入redux
 @storeKit(store => {
@@ -11,7 +11,7 @@ import SearchComp from './../../components/searchComp'
     appName: store.global.appName
   }
 })
-class User extends Component {
+class UserList extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -40,4 +40,4 @@ class User extends Component {
   }
 }
 
-export default User
+export default UserList

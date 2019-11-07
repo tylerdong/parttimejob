@@ -6,7 +6,6 @@ import * as modules from './modules'
 
 let reducers = {}
 let actions = {}
-console.log(modules)
 Object.keys(modules).forEach(key => {
   const module = modules[key]
   reducers[key] = module.reducers
