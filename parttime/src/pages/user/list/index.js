@@ -16,11 +16,21 @@ class UserList extends Component {
     super(props)
     this.state = {
       userList: [],
-      userTableColumn: userTableColumn
+      userTableColumn: userTableColumn,
+      searchItem: ['id', 'name', 'email', 'createTime', 'updateTime'],
+      searchItemArr: []
     }
   }
   componentDidMount() {
-    api.getUserList({ page: 1, pageSize: 10 }).then(res => {
+    this.initData()
+  }
+
+  initData() {
+    this.search()
+  }
+
+  search(data = {}) {
+    api.getUserList({ page: 1, pageSize: 10, ...data }).then(res => {
       if (res.success) {
         if (res.data && Array.isArray(res.data.list) && res.data.list.length > 0) {
           this.setState({ userList: res.data.list })
@@ -30,10 +40,10 @@ class UserList extends Component {
   }
 
   render() {
-    let { userList, userTableColumn } = this.state
+    let { userList, userTableColumn, searchItem } = this.state
     return (
       <div>
-        <SearchComp/>
+        <SearchComp searchItem={searchItem} columns={userTableColumn} onSearch={this.search.bind(this)}/>
         <Table dataSource={userList} columns={userTableColumn} rowKey='id' size="middle" bordered/>
       </div>
     )

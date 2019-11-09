@@ -1,8 +1,7 @@
-export default
-`/**
+/**
 * 可以采用mockjs来自动生成mock数据
 * http://mockjs.com/examples.html#DPD
-* @author
+* @author xiexp
 */
 
 import sleep from 'system-sleep'
@@ -21,4 +20,3 @@ export default (req, res, next) => {
     data: data
   }
 }
-`

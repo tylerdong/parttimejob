@@ -17,6 +17,14 @@ export default {
   getInitState(params) {
     return fetch('/base/initState', params)
   },
+  // 用户角色
+  getUserRole(params) {
+    return fetch('/user/role/list', params)
+  },
+  // 用户权限
+  getUserAuth(params) {
+    return fetch('/user/auth/list', params)
+  },
   // 获取所有用户信息
   getUserList(params) {
     return fetch('/user/list', params)
