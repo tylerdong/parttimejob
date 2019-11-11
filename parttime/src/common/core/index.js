@@ -7,12 +7,19 @@ import App from './app'
 import registerServiceWorker from './registerServiceWorker'
 import api from 'api'
 import config from 'config'
+import { ConfigProvider } from 'antd'
+import zhCN from 'antd/es/locale/zh_CN'
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+moment.locale('zh-cn')
 
 const { global } = store.getState()
 const initApp = () => {
   ReactDOM.render(<AppContainer>
     <Provider store={store}>
-      <App/>
+      <ConfigProvider locale={zhCN}>
+        <App/>
+      </ConfigProvider>
     </Provider>
   </AppContainer>, document.getElementById('root'))
 

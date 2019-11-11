@@ -13,7 +13,7 @@ import style from './index.pcss'
 
 const { Sider, Content } = Layout
 const MenuItems = Menu.Item
-const userInfo = storage.get('UserInfo') || {}
+const userInfo = storage.getUser() || {}
 
 class MainLayOut extends Component {
   constructor(props) {
@@ -56,10 +56,10 @@ class MainLayOut extends Component {
   logout = async (item) => {
     // 退出登陆接口调用
     if (item.key === 'logout') {
-      const userInfo = storage.get('UserInfo')
+      const userInfo = storage.getUser()
       const res = await api.logout(userInfo)
       if (res.code === 0 && res.data) {
-        storage.set('UserInfo', {})
+        storage.setUser('')
         window.location.href = config.loginRoute
       }
     }

@@ -9,8 +9,9 @@ const data = Mock.mock([
     icon: 'user',
     url: '/user',
     children: [
-      { key: 'user-role', value: '角色', icon: 'api', url: '/user/role' },
       { key: 'user-auth', value: '权限', icon: 'build', url: '/user/auth' },
+      { key: 'user-role', value: '角色', icon: 'api', url: '/user/role' },
+      { key: 'user-roleGroup', value: '角色组', icon: 'api', url: '/user/roleGroup' },
       { key: 'user-list', value: '用户', icon: 'user', url: '/user/list' }
     ]
   },

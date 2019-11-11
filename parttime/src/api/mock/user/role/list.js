@@ -9,17 +9,15 @@ import Mock from 'mockjs'
 
 const Random = Mock.Random
 
-let dataList = []
-for (let i = 0; i < 12; i++) {
-  let template = {
-    'id': Random.natural(1, 1000),
-    'roleName': Random.cword(2, 5),
-    'detail': Random.cword(8, 20),
-    'createTime': Random.datetime(),
-    'updateTime': Random.datetime()
-  }
-  dataList.push(template)
-}
+let dataList = [
+  { 'id': 1, 'roleName': '管理员', 'detail': '系统管理员', 'createTime': Random.datetime(), 'updateTime': Random.datetime() },
+  { 'id': 2, 'roleName': '运维', 'detail': '系统管理员', 'createTime': Random.datetime(), 'updateTime': Random.datetime() },
+  { 'id': 3, 'roleName': '市场', 'detail': '系统管理员', 'createTime': Random.datetime(), 'updateTime': Random.datetime() },
+  { 'id': 4, 'roleName': 'seo', 'detail': '系统管理员', 'createTime': Random.datetime(), 'updateTime': Random.datetime() },
+  { 'id': 5, 'roleName': '市场部组长', 'detail': '系统管理员', 'createTime': Random.datetime(), 'updateTime': Random.datetime() },
+  { 'id': 6, 'roleName': '市场部推广', 'detail': '系统管理员', 'createTime': Random.datetime(), 'updateTime': Random.datetime() },
+  { 'id': 7, 'roleName': 'seo组长', 'detail': '系统管理员', 'createTime': Random.datetime(), 'updateTime': Random.datetime() }
+]
 
 export default (req, res, next) => {
   // 模拟网络环境，延迟100ms返回

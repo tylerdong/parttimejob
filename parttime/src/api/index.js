@@ -21,6 +21,10 @@ export default {
   getUserRole(params) {
     return fetch('/user/role/list', params)
   },
+  // 角色组
+  getUserRoleGroup(params) {
+    return fetch('/user/role/group', params)
+  },
   // 用户权限
   getUserAuth(params) {
     return fetch('/user/auth/list', params)

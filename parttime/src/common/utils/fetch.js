@@ -12,7 +12,7 @@ let fetcher = axios.create({
     'Access-Control-Allow-Origin': '*'
   },
   transformRequest: [function (data) {
-    const userInfo = storage.get('UserInfo')
+    const userInfo = storage.getUser()
     if (userInfo && data && !data.NOUSERINFO) {
       data.token = userInfo.token
     }

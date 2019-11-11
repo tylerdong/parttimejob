@@ -1,57 +1,34 @@
-const storage = { version: '1.3.17' }
-storage.has = key => storage.get(key) !== undefined
-
-storage.transact = (key, defaultVal, transactionFn) => {
-  if (transactionFn === null) {
-    transactionFn = defaultVal
-    defaultVal = null
-  }
-  if (defaultVal === null) {
-    defaultVal = {}
-  }
-  let val = storage.get(key, defaultVal)
-  transactionFn(val)
-  storage.set(key, val)
-}
-
-storage.serialize = value => JSON.stringify(value)
-storage.deserialize = value => {
-  if (typeof value !== 'string') {
-    return undefined
-  }
-  try {
-    return JSON.parse(value)
-  } catch (e) {
-    return value || undefined
+const keys = ['User', 'Menu']
+const defaultLocalStorage = true
+const utility = {
+  setObj(key, data, local = defaultLocalStorage) {
+    if (local) {
+      window.localStorage.setItem(key, JSON.stringify(data))
+    } else {
+      window.sessionStorage.setItem(key, JSON.stringify(data))
+    }
+  },
+  getObj(key, local = defaultLocalStorage) {
+    try {
+      let data
+      if (local) {
+        data = JSON.parse(window.localStorage.getItem(key))
+      } else {
+        data = JSON.parse(window.sessionStorage.getItem(key))
+      }
+      return data
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
-
-storage.set = (key, val) => {
-  if (val === undefined) {
-    return storage.remove(key)
+const storage = {}
+for (let key of keys) {
+  storage[`set${key}`] = (value, local = defaultLocalStorage) => {
+    utility.setObj(key, value, local)
   }
-  localStorage.setItem(key, storage.serialize(val))
-  return val
-}
-storage.get = (key, defaultVal) => {
-  const val = storage.deserialize(localStorage.getItem(key))
-  return (val === undefined ? defaultVal : val)
-}
-storage.remove = key => localStorage.removeItem(key)
-storage.clear = () => localStorage.clear()
-storage.getAll = () => {
-  let ret = {}
-  storage.forEach((key, val) => {
-    ret[key] = val
-  })
-  return ret
-}
-storage.forEach = callback => {
-  let key = ''
-  let len = localStorage.length
-  for (let i = 0; i < len; i++) {
-    key = localStorage.key(i)
-    callback(key, storage.get(key))
+  storage[`get${key}`] = (local = defaultLocalStorage) => {
+    return utility.getObj(key, local)
   }
 }
 export default storage

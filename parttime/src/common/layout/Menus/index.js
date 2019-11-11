@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import Style from './style.pcss'
 import configMenus from 'src/menus'
 import api from 'api'
+import storage from 'utils/storage'
 
 const SubMenu = Menu.SubMenu
 const MenuItem = Menu.Item
@@ -42,10 +43,12 @@ class MamsMenu extends Component {
         url: '/home/menutip'
       }]
       this.setState({ menus: defaultMenus })
+      storage.setMenu(defaultMenus)
     }
     api.getMenus().then(res => {
       if (res.code === 0 && res.data) {
         this.setState({ menus: res.data })
+        storage.setMenu(res.data)
       } else {
         setDefault()
       }

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { Tabs, Input, Button } from 'antd'
+import { Tabs, Input, Button, DatePicker } from 'antd'
 const { TabPane } = Tabs
 const { Search } = Input
+const { RangePicker } = DatePicker
 import style from './../static/css/index.pcss'
 
 class SearchComp extends Component {
@@ -20,12 +21,25 @@ class SearchComp extends Component {
   componentDidMount() {
   }
 
-  setSearchState(event) {
+  setSearchState(event, column) {
     let { searchObj } = this.state
-    if (event.target.value) {
-      searchObj[event.target.name] = event.target.value
+    if (event.type === 'timeRange') {
+      if (column[0]) {
+        searchObj[`${event.dataIndex}Start`] = column[0].format('YYYY-MM-DD hh:mm')
+      } else {
+        delete searchObj[`${event.dataIndex}Start`]
+      }
+      if (column[1]) {
+        searchObj[`${event.dataIndex}End`] = column[1].format('YYYY-MM-DD hh:mm')
+      } else {
+        delete searchObj[`${event.dataIndex}End`]
+      }
     } else {
-      delete searchObj[event.target.name]
+      if (event.target.value) {
+        searchObj[event.target.name] = event.target.value
+      } else {
+        delete searchObj[event.target.name]
+      }
     }
     this.setState(searchObj)
   }
@@ -50,7 +64,7 @@ class SearchComp extends Component {
             } else if (s.type === 'timeRange') {
               return <div key={s.key}>
                 <label htmlFor={s.key}>{s.title}</label>
-                <Input name={s.key} id={s.key} allowClear placeholder={s.title} onChange={ this.setSearchState.bind(this) } className={style.itemInput}/>
+                <RangePicker name={s.key} id={s.key} allowClear onChange={ this.setSearchState.bind(this, s) } className={style.itemInput}/>
               </div>
             } else {
               return null

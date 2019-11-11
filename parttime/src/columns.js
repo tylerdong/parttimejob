@@ -10,13 +10,17 @@ const createTime = { title: '创建时间', dataIndex: 'createTime', key: 'creat
 const updateTime = { title: '更新时间', dataIndex: 'updateTime', key: 'updateTime', type: 'timeRange' }
 const action = { title: '操作', key: 'action', render: (text, record) => <span><Icon type="edit"/><Divider type="vertical"/><Icon type="delete" className={style.deleteLink}/></span> }
 
-const roleName = { title: '角色名称', dataIndex: 'roleName', key: 'roleName', type: 'input' }
+const roleName = { title: '角色', dataIndex: 'roleName', key: 'roleName', type: 'input' }
 const detail = { title: '介绍', dataIndex: 'detail', key: 'detail', type: 'input' }
+
+const groupName = { title: '角色组', dataIndex: 'groupName', key: 'groupName', type: 'input' }
 
 const userTableColumn = [id, name, email, mobile, thumb, createTime, updateTime, action]
 const roleTableColumn = [id, roleName, detail, updateTime, createTime, action]
+const roleGroupColumn = [id, groupName, detail, updateTime, createTime, action]
 
 export {
   userTableColumn,
-  roleTableColumn
+  roleTableColumn,
+  roleGroupColumn
 }
