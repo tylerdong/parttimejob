@@ -10,8 +10,8 @@ module.exports = {
             callback(result);
         });
     },
-    addUser: function (callback) {
-        pool.query(sql.user.add, function (error, result) {
+    addUser: function (param, callback) {
+        pool.query(sql.user.add, param, function (error, result) {
             if (error) throw  error
             callback(result)
         })
