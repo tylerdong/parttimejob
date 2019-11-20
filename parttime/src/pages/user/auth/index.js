@@ -23,30 +23,14 @@ class UserAuth extends Component {
     this.initData()
   }
   initData() {
-    const loopMenu = menus => menus.map(menu => {
-      if (menu.children) {
-        return {
-          key: menu.key,
-          title: menu.value,
-          children: loopMenu(menu.children)
-        }
-      }
-      return {
-        key: menu.key,
-        title: menu.value
-      }
-    })
     let menuData = storage.getMenu()
-    let treeData = []
     if (menuData) {
-      treeData = loopMenu(menuData)
-      this.setState({ treeData })
+      this.setState({ treeData: menuData })
     } else {
       api.getMenus().then(res => {
         if (res.code === 0 && res.data) {
           storage.setMenu(res.data) // 缓存起来
-          treeData = loopMenu(res.data)
-          this.setState({ treeData })
+          this.setState({ treeData: res.data })
         }
       })
     }
@@ -59,13 +43,11 @@ class UserAuth extends Component {
   })
   render() {
     let { treeData, defaultExpandAll } = this.state
-    return (
-      <div>
-        <Tree checkable defaultExpandAll={defaultExpandAll}>
-          { this.renderTnode(treeData) }
-        </Tree>
-      </div>
-    )
+    return (<div>
+      <Tree checkable defaultExpandAll={defaultExpandAll}>
+        { this.renderTnode(treeData) }
+      </Tree>
+    </div>)
   }
 }
 

@@ -38,7 +38,7 @@ class MamsMenu extends Component {
     const setDefault = () => {
       const defaultMenus = [{
         icon: 'error',
-        value: '未取到menus配置',
+        title: '未取到menus配置',
         key: 'error',
         url: '/home/menutip'
       }]
@@ -72,14 +72,14 @@ class MamsMenu extends Component {
           key={item.key}
           title={<span className={Style.ellip}>
             <Icon type={item.icon}/>
-            <span title={item.value}>{item.value}</span>
+            <span title={item.title}>{item.title}</span>
           </span>}>
           {loop(item.children)}</SubMenu>)
       }
       return <MenuItem key={item.key} className={getMenuItemClass(item.url)}>
         <Link to={item.url} className={Style.ellip}>
           <Icon type={item.icon}/>
-          <span title={item.value}>{item.value}</span>
+          <span title={item.title}>{item.title}</span>
         </Link>
       </MenuItem>
     })
