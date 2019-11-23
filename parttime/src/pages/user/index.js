@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import storeKit from 'storeKit'
 import api from 'api'
-import { userTableColumn } from './../../columns'
+import { user } from './../../columns'
 import { Table } from 'antd'
 import SearchComp from './../../components/searchComp'
 
@@ -15,8 +15,7 @@ class User extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      userList: [],
-      userTableColumn: userTableColumn
+      userList: []
     }
   }
   componentDidMount() {
@@ -30,11 +29,11 @@ class User extends Component {
   }
 
   render() {
-    let { userList, userTableColumn } = this.state
+    let { userList } = this.state
     return (
       <div>
         <SearchComp/>
-        <Table dataSource={userList} columns={userTableColumn} rowKey='id' size="middle" bordered/>
+        <Table dataSource={userList} columns={user.column} rowKey='id' size="middle" bordered/>
       </div>
     )
   }

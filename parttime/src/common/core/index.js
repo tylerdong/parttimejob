@@ -40,7 +40,7 @@ if (!config.needAuth || global.appInitData.permission) {
   initApp()
 } else {
   api.getInitState().then(res => {
-    if (res.code === 0 && res.data && res.data.permission) {
+    if (res.success && res.data && res.data.permission) {
       store.dispatch({ type: 'GET_INIT_DATA', appInitData: res.data })
       initApp()
     } else {

@@ -46,7 +46,7 @@ class MamsMenu extends Component {
       storage.setMenu(defaultMenus)
     }
     api.getMenus().then(res => {
-      if (res.code === 0 && res.data) {
+      if (res.success && res.data) {
         this.setState({ menus: res.data })
         storage.setMenu(res.data)
       } else {

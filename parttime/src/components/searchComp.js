@@ -4,6 +4,7 @@ const { TabPane } = Tabs
 const { Search } = Input
 const { RangePicker } = DatePicker
 import style from './../static/css/index.pcss'
+import { Type } from 'utils'
 
 class SearchComp extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class SearchComp extends Component {
 
   setSearchState(event, column) {
     let { searchObj } = this.state
-    if (event.type === 'timeRange') {
+    if (event.type === 'time') {
       if (column[0]) {
         searchObj[`${event.dataIndex}Start`] = column[0].format('YYYY-MM-DD hh:mm')
       } else {
@@ -61,7 +62,7 @@ class SearchComp extends Component {
                 <label htmlFor={s.key}>{s.title}</label>
                 <Input name={s.key} id={s.key} allowClear placeholder={s.title} onChange={this.setSearchState.bind(this)} className={style.itemInput}/>
               </div>
-            } else if (s.type === 'timeRange') {
+            } else if (s.type === 'time') {
               return <div key={s.key}>
                 <label htmlFor={s.key}>{s.title}</label>
                 <RangePicker name={s.key} id={s.key} allowClear onChange={ this.setSearchState.bind(this, s) } className={style.itemInput}/>
@@ -83,6 +84,7 @@ class SearchComp extends Component {
 
   render() {
     let { timeSpan, moreSearch } = this.state
+    let { onAdd } = this.props
     return (<div>
       <div className={style.search}>
         <Tabs>
@@ -91,6 +93,7 @@ class SearchComp extends Component {
         <div className={style.searchBox}>
           <Search placeholder="请输入关键字" allowClear onSearch={value => console.log(value)} className={style.itemInput}/>
           <Button onClick={() => this.setState({ moreSearch: !moreSearch })} icon="search" className={style.commonMarginLeft}/>
+          {Type.isFunction(onAdd) ? <Button onClick={onAdd.bind(this, true)} className={style.commonMarginLeft} type="primary" icon="plus"/> : null}
         </div>
       </div>
       {(moreSearch) ? this.getSearchItem() : null}

@@ -13,7 +13,20 @@ module.exports = {
     addUser: function (param, callback) {
         pool.query(sql.user.add, param, function (error, result) {
             if (error) throw  error
-            callback(result)
+            callback(result);
+        })
+    },
+    roleList: (param, cb) => {
+
+        pool.query(sql.user.roleList, param, (error, result) => {
+            if(error) throw error
+            cb(result)
+        })
+    },
+    addRole: (param, cb) => {
+        pool.query(sql.user.addRole, param, (error, result) => {
+            if(error) throw error
+            cb(result)
         })
     }
 }

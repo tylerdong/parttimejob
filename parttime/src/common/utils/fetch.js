@@ -36,7 +36,7 @@ export default async (url = '', params = {}, option = {}) => {
   if (!url) {
     return Promise.reject(`params 'url' not exists!`)
   }
-  let method = option.method || 'post'
+  let method = option.method || 'get'
   let prefixName = option.prefixName || 'default'
   if (url.indexOf('http') !== 0) {
     let baseUrl = config.baseUrl[prefixName]

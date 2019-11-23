@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import storeKit from 'storeKit'
 import api from 'api'
-import { roleGroupColumn } from './../../../columns'
+import { group } from './../../../columns'
 import { Table } from 'antd'
 import SearchComp from './../../../components/searchComp'
 
@@ -37,8 +37,8 @@ class UserRolegroup extends Component {
   render() {
     let { searchItem, data } = this.state
     return (<div>
-      <SearchComp searchItem={searchItem} columns={roleGroupColumn} onSearch={this.search.bind(this)}/>
-      <Table dataSource={data} columns={roleGroupColumn} rowKey='id' size="middle" bordered/>
+      <SearchComp searchItem={searchItem} columns={group.column} onSearch={this.search.bind(this)}/>
+      <Table dataSource={data} columns={group.column} rowKey='id' size="middle" bordered/>
     </div>)
   }
 }

@@ -4,14 +4,14 @@
  **/
 import Loadable from 'react-loadable'
 import Loading from 'components/Loading'
-export const demo = Loadable({ loader: () => import('pages/demo/index.js'), loading: Loading })
 export const home = Loadable({ loader: () => import('pages/home/index.js'), loading: Loading })
+export const demo = Loadable({ loader: () => import('pages/demo/index.js'), loading: Loading })
 export const user = Loadable({ loader: () => import('pages/user/index.js'), loading: Loading })
 export const demoAuth = Loadable({ loader: () => import('pages/demo/auth/index.js'), loading: Loading })
-export const demoRedux = Loadable({ loader: () => import('pages/demo/redux/index.js'), loading: Loading })
 export const demoMenutip = Loadable({ loader: () => import('pages/demo/menutip/index.js'), loading: Loading })
+export const demoRedux = Loadable({ loader: () => import('pages/demo/redux/index.js'), loading: Loading })
 export const userAuth = Loadable({ loader: () => import('pages/user/auth/index.js'), loading: Loading })
-export const userList = Loadable({ loader: () => import('pages/user/list/index.js'), loading: Loading })
 export const userLogin = Loadable({ loader: () => import('pages/user/login/index.js'), loading: Loading })
+export const userList = Loadable({ loader: () => import('pages/user/list/index.js'), loading: Loading })
 export const userRole = Loadable({ loader: () => import('pages/user/role/index.js'), loading: Loading })
 export const userRolegroup = Loadable({ loader: () => import('pages/user/roleGroup/index.js'), loading: Loading })

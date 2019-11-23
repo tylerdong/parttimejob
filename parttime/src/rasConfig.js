@@ -24,7 +24,7 @@ module.exports = {
   // 代理配置
   proxyTable: {
     '/api': {
-      target: 'http://localhost:10086',
+      target: 'http://localhost:3333',
       changeOrigin: true,
       pathRewrite: {}
     },

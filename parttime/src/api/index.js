@@ -15,11 +15,14 @@ export default {
   },
   // 获取APP初始化信息，包含权限等内容
   getInitState(params) {
-    return fetch('/base/initState', params)
+    return fetch('/base/initState', params, { method: 'get' })
   },
   // 用户角色
   getUserRole(params) {
     return fetch('/user/role/list', params)
+  },
+  addRole(params) {
+    return fetch('/user/role/add', params, { method: 'post' })
   },
   // 角色组
   getUserRoleGroup(params) {
