@@ -18,16 +18,9 @@ module.exports = {
         }
     },
     paging: query => {
-        let processedQuery = {}, key = Object.keys(query)
-        if(!(query.hasOwnProperty('pageSize') && query.hasOwnProperty('page')))
-        for (let i = 0; i < key.length; i++) {
-            if(key[i] === 'pageSize') {
-                processedQuery.pageSize = parseInt(query.pageSize)
-            } else if (key[i] === 'page') {
-
-            } else {
-
-            }
-        }
+        query.offSet = query.page <= 1 ? 0 : (query.page - 1) * query.pageSize
+        query.pageSize = parseInt(query.pageSize)
+        query.page = parseInt(query.page)
+        return query
     }
 }

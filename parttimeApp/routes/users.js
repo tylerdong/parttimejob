@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var daoUser = require('./../dao/daoUser')
 var result = require('./../model/result')
+var config = require('./../conf/index')
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -29,26 +30,27 @@ router.get('/menus', function (req, res, next) {
     res.json(result.createResult(true, data))
 })
 
+// 分页查询用户
 router.get('/list', function (req, res, next) {
-    daoUser.list(function (data) {
-        res.json(result.createResult(true, data))
-    })
+    daoUser.list(config.paging(req.query), data => res.json(result.createResult(true, data)))
 });
 
-router.get('/role/list', (req, res, next) => {
-    daoUser.roleList(req.query,data => res.json(result.createResult(true, data)))
-})
-
-// 添加角色
-router.post('/role/add', (req, res, next) => {
-    daoUser.addRole(req.body, data => res.json(result.createResult(true, data)))
-})
-
+// 添加用户
 router.post('/addUser', function (req, res, next) {
     // 从请求中获得参数
     daoUser.addUser(req.body, function (data) {
         res.json(result.createResult(true, data))
     })
+})
+
+// 分页查询角色
+router.get('/role/list', (req, res, next) => {
+    daoUser.roleList(config.paging(req.query),data => res.json(result.createResult(true, data)))
+})
+
+// 添加角色
+router.post('/role/add', (req, res, next) => {
+    daoUser.addRole(req.body, data => res.json(result.createResult(true, data)))
 })
 
 
