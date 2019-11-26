@@ -7,9 +7,9 @@ module.exports = {
         timezone: 'local',
         // 最大连接数，默认为10
         connectionLimit: 10,
-        queryFormat: function (query, values) {
-            if (!values) return query;
-            return query.replace(/\:(\w+)/g, function (txt, key) {
+        queryFormat: function (sqlString, values) {
+            if (!values) return sqlString;
+            return sqlString.replace(/\:(\w+)/g, function (txt, key) {
                 if (values.hasOwnProperty(key)) {
                     return this.escape(values[key]);
                 }
@@ -18,9 +18,10 @@ module.exports = {
         }
     },
     paging: query => {
-        query.offSet = query.page <= 1 ? 0 : (query.page - 1) * query.pageSize
-        query.pageSize = parseInt(query.pageSize)
-        query.page = parseInt(query.page)
+        if (query.hasOwnProperty('pageSize'))  {
+            query.pageSize = parseInt(query.pageSize)
+            query.offSet = query.page <= 1 ? 0 : (query.page - 1) * query.pageSize
+        }
         return query
     }
 }

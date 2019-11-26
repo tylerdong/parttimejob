@@ -5,8 +5,13 @@ var pool = mysql.createPool(config.mysql)
 
 module.exports = {
     list: function (param, callback) {
-        pool.query(sql.user.list, param, (error, result) => {
-            if (error) throw error;
+        let strSql = 'SELECT * FROM t_user WHERE 1=1'
+        if(param.hasOwnProperty('name')) strSql += ' AND name=:name'
+        if(param.hasOwnProperty('mobile')) strSql += ' AND mobile=:mobile'
+        if(param.hasOwnProperty('email')) strSql += ' AND email=:email'
+        if(param.hasOwnProperty('pageSize')) strSql += ' LIMIT :offSet, :pageSize'
+        pool.query(config.paging(strSql), param, (error, result) => {
+            if (error) { throw error; }
             callback(result);
         });
     },
