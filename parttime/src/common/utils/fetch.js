@@ -8,7 +8,7 @@ let fetcher = axios.create({
   withCredentials: true,
   headers: {
     'Accept': '*',
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*'
   },
   transformRequest: [function (data) {

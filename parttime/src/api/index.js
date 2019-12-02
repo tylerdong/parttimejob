@@ -28,6 +28,10 @@ export default {
   getUserRoleGroup(params) {
     return fetch('/user/role/group', params)
   },
+  // 添加角色组
+  addRoleGroup(params) {
+    return fetch('/user/role/group/add', params, { method: 'post' })
+  },
   // 用户权限
   getUserAuth(params) {
     return fetch('/user/auth/list', params)
