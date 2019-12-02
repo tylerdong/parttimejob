@@ -39,14 +39,17 @@ export default async (url = '', params = {}, option = {}) => {
   // 默认get请求
   let method = option.method || 'get'
   let prefixName = option.prefixName || 'default'
+  console.log(prefixName)
   // 不指定服务器地址
+  console.log(url)
   if (url.indexOf('http') !== 0) {
     let baseUrl = config.baseUrl[prefixName]
+    console.log(baseUrl)
     if (typeof baseUrl === 'object') {
       baseUrl = baseUrl[buildEnv]
     }
-    console.log('API buildEnv&prefixName&baseUrl:', `${buildEnv}&${prefixName}&${baseUrl}`)
     url = baseUrl + url
+    console.log(url)
   }
   switch (method) {
     case 'get':
