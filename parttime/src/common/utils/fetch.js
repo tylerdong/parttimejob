@@ -38,7 +38,7 @@ export default async (url = '', params = {}, option = {}) => {
   }
   // 默认get请求
   let method = option.method || 'get'
-  let prefixName = option.prefixName || 'default'
+  let prefixName = option.prefixName || 'otherDomain'
   console.log(prefixName)
   // 不指定服务器地址
   console.log(url)

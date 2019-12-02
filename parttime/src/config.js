@@ -13,7 +13,7 @@ export default {
   baseUrl: {
     default: '/api',
     otherDomain: {
-      development: 'http://localhost:3333/api',
+      development: '/api',
       test: '//test-api.xxx.com',
       pre: '//pre-api.xxx.com',
       production: 'http://120.27.214.189:3333/api'
