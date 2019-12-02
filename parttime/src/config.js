@@ -13,10 +13,10 @@ export default {
   baseUrl: {
     default: '/api',
     otherDomain: {
-      development: '/other',
+      development: 'http://localhost:3333/api',
       test: '//test-api.xxx.com',
       pre: '//pre-api.xxx.com',
-      production: '//api.xxx.com'
+      production: 'http://120.27.214.189:3333/api'
     }
   },
   // 如无前线要求，可直接在此配置侧边栏菜单

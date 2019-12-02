@@ -3,6 +3,7 @@ module.exports = {
         host: 'localhost',
         user: 'root',
         password: 'qwerqwer',
+        // password: '-@fhua&$',
         database:'dbpart',
         timezone: 'local',
         // 最大连接数，默认为10

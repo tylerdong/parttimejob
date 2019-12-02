@@ -20,11 +20,11 @@ module.exports = {
     storeKit: resolve('common/core/store/storeKit')
   },
   devHost: 'localhost',
-  devPort: 3000,
+  devPort: 3332,
   // 代理配置
   proxyTable: {
     '/api': {
-      target: 'http://localhost:3333',
+      target: 'http://120.27.214.189:3333',
       changeOrigin: true,
       pathRewrite: {}
     },

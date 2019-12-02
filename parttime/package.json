@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "set BUILD_ENV=production && node scripts/build.js",
-    "build:pre": "set BUILD_ENV=pre && node scripts/build.js",
-    "build:test": "set BUILD_ENV=test && node scripts/build.js",
+    "build": "set BUILD_ENV=production&&node scripts/build.js",
+    "build:pre": "set BUILD_ENV=pre&&node scripts/build.js",
+    "build:test": "set BUILD_ENV=test&&node scripts/build.js",
     "dll": "webpack --config build/webpack.config.dll.js",
     "test": "node scripts/test.js --env=jsdom",
     "updateRAS": "node scripts/upgrade.js"

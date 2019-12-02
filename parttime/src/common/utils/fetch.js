@@ -8,7 +8,7 @@ let fetcher = axios.create({
   withCredentials: true,
   headers: {
     'Accept': '*',
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     'Access-Control-Allow-Origin': '*'
   },
   transformRequest: [function (data) {
@@ -36,14 +36,16 @@ export default async (url = '', params = {}, option = {}) => {
   if (!url) {
     return Promise.reject(`params 'url' not exists!`)
   }
+  // 默认get请求
   let method = option.method || 'get'
   let prefixName = option.prefixName || 'default'
+  // 不指定服务器地址
   if (url.indexOf('http') !== 0) {
     let baseUrl = config.baseUrl[prefixName]
     if (typeof baseUrl === 'object') {
       baseUrl = baseUrl[buildEnv]
     }
-    console.log('API BASE_URL:', baseUrl)
+    console.log('API buildEnv&prefixName&baseUrl:', `${buildEnv}&${prefixName}&${baseUrl}`)
     url = baseUrl + url
   }
   switch (method) {
