@@ -49,21 +49,25 @@ class UserRolegroup extends Component {
       }
     }).finally(() => message.destroy())
   }
+  handleDelete(record) {
+    console.log(record)
+  }
+  handleEdit(record) {
+    console.log(record)
+  }
   render() {
-    let { searchItem, data, showAdd } = this.state
+    let { data, showAdd } = this.state
     return (<div>
       <SearchComp
-        searchItem={searchItem}
-        columns={group.column}
+        searchField={group.searchField}
         onAdd={this.popUpRoleGroup.bind(this, true)}
         onSearch={this.search.bind(this)}/>
       <Table dataSource={data}
-        columns={group.column}
+        columns={group.column({ handleDelete: this.handleDelete.bind(this), handleEdit: this.handleEdit.bind(this) })}
         rowKey='id'
         size="middle"
         bordered/>
-      <AddComp
-        field={group.field}
+      <AddComp field={group.field}
         showAdd={showAdd}
         onAddData={this.addRoleGroup.bind(this)}
         title={route.title}/>

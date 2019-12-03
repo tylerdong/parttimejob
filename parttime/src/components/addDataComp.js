@@ -6,15 +6,16 @@ class AddDataComp extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      showAdd: false
     }
   }
   componentWillReceiveProps(nextProps, nextContext) {
     this.setState({ showAdd: nextProps.showAdd })
   }
+  // 取消，关闭，调用父组件关闭弹框
   hideModel() {
-    this.setState({ showAdd: false })
+    this.props.onClose()
   }
+  // 确认，调用父组件，添加数据
   confirmForm() {
     this.props.form.validateFields((err, values) => {
       if (err) {
@@ -24,11 +25,16 @@ class AddDataComp extends Component {
     })
   }
   render() {
+    let { showAdd } = this.state
     let { field, title } = this.props
     let { getFieldDecorator } = this.props.form
-    let { showAdd } = this.state
     const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 18 }}
-    return <Modal title={'添加' + title} centered visible={showAdd} onCancel={this.hideModel.bind(this)} onOk={this.confirmForm.bind(this)}>
+    return <Modal
+      visible={showAdd}
+      title={'添加' + title}
+      centered
+      onCancel={this.hideModel.bind(this)}
+      onOk={this.confirmForm.bind(this)}>
       <Form {...formItemLayout}>
         {field.map((f, index) => <Form.Item key={f.key} label={f.title}>
           {getFieldDecorator(f.key, {

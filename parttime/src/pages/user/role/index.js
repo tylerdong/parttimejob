@@ -17,7 +17,6 @@ class UserRole extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      searchItem: ['id', 'roleName', 'detail', 'createTime'], // 搜索
       showAdd: false
     }
   }
@@ -30,7 +29,7 @@ class UserRole extends Component {
   search(data) {
     api.getUserRole({ page: 1, pageSize: 3, ...data }).then(res => {
       if (res.success) {
-        if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+        if (res.data && Array.isArray(res.data)) {
           this.setState({ roleList: res.data })
         }
       }
@@ -50,12 +49,30 @@ class UserRole extends Component {
       message.destroy()
     })
   }
+  handleDelete(record) {
+    console.log(record)
+  }
+  handleEdit(record) {
+    console.log(record)
+  }
   render() {
-    let { roleList, searchItem, showAdd } = this.state
+    let { roleList, showAdd } = this.state
     return (<div>
-      <SearchComp searchItem={searchItem} columns={role.column} onSearch={this.search.bind(this)} onAdd={this.popAddRole.bind(this)}/>
-      <Table dataSource={roleList} columns={role.column} rowKey='id' size="middle" bordered/>
-      <AddComp field={role.field} showAdd={showAdd} onAddData={this.addRole.bind(this)} title={route.title}/>
+      <SearchComp
+        searchField={role.searchField}
+        onSearch={this.search.bind(this)}
+        onAdd={this.popAddRole.bind(this, true)}/>
+      <Table dataSource={roleList}
+        columns={role.column({ handleDelete: this.handleDelete.bind(this), handleEdit: this.handleEdit.bind(this) })}
+        rowKey='id'
+        size="middle"
+        bordered/>
+      <AddComp
+        field={role.field}
+        showAdd={showAdd}
+        onAddData={this.addRole.bind(this)}
+        onClose={this.popAddRole.bind(this, false)}
+        title={route.title}/>
     </div>)
   }
 }
