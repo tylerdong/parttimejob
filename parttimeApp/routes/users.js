@@ -53,5 +53,15 @@ router.post('/role/add', (req, res, next) => {
     daoUser.addRole(req.body, data => res.json(result.createResult(true, data)))
 })
 
+// 查找角色组
+router.get('/role/group', (req, res, next) => {
+    daoUser.roleGroupList(req.body, data => res.json(result.createResult(true, data)))
+})
+
+// 添加角色组
+router.post('/role/group/add', (req, res, next) => {
+    daoUser.addRoleGroup(req.body, data => res.json(result.createResult(true, data)))
+})
+
 
 module.exports = router;

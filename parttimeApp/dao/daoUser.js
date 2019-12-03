@@ -32,5 +32,20 @@ module.exports = {
             if(error) throw error
             cb(result)
         })
+    },
+    // 查找角色组
+    roleGroupList: (param, cb) => {
+        let strSql = 'SELECT * FROM t_group WHERE 1=1'
+        if(param.hasOwnProperty('pageSize')) strSql += ' LIMIT :offSet, :pageSize'
+        pool.query(config.paging(strSql), param, (error, result) => {
+            if (error) { throw error; }
+            cb(result);
+        })
+    },
+    addRoleGroup: (param, cb) => {
+        pool.query(sql.user.addRoleGroup, param, (error, result) => {
+            if(error) throw error
+            cb(result)
+        })
     }
 }
