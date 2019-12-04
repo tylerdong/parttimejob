@@ -21,6 +21,7 @@ module.exports = {
         }
     },
     paging: (sql, param) => {
+        // 如果请求中有pageSize，使用current，pageSize生成offSet
         if (param.hasOwnProperty('pageSize')) {
             param.pageSize = parseInt(param.pageSize)
             param.offSet = param.current <= 1 ? 0 : (param.current - 1) * param.pageSize

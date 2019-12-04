@@ -19,8 +19,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+//解析 application/json
 app.use(bodyParser.json());
+//解析 application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/api/base', indexRouter);
