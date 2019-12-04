@@ -127,7 +127,7 @@ import { user, pageSet } from './../../../columns'
 ```
 
 在AddComp组件中使用传入的字段：
-```html
+```javascript
 import React, { Component } from 'react'
 import { Form, Modal, Input, message } from 'antd'
 
@@ -182,4 +182,171 @@ export default AddComp
 ```
 未解决问题：
 * 验证，不同的字段验证不同，可以在字段中传入一个RegExp来验证，复杂的验证比如密码比较，字段之间有关联的验证如何通过字段来验证，目前本人没有想到好办法
-* 复杂字段，比如文件上传，传入file或者img字段可以明确表示需要上传的字段类型，这种一般是上传文件后得到一个链接，返回这个链接并吸入到数据库中，暂时没有实现
+* 复杂字段，比如文件上传，传入file或者img字段可以明确表示需要上传的字段类型，这种一般是上传文件后得到一个链接，返回这个链接并写入到数据库中，暂时没有实现。
+
+### 使用同一个搜索组件
+同样，搜索也是根据几个字段来查询信息，这里我们可以把搜索分成两种类型：
+* 简单搜索，按照更新时间来搜索，比如昨天，今天，当月，上月，名称搜索，其中昨天，今天，当月，上月做成tab的形式，名称直接输入框，并且回车搜索。这个能满足最普遍的搜索功能。
+* 复杂搜索，简单搜索的基础上加上要搜索的字段。
+简单搜索
+![](https://github.com/tylerdong/parttimejob/blob/master/parttime/public/common.png)
+复杂搜索
+![](https://github.com/tylerdong/parttimejob/blob/master/parttime/public/complex.png)
+
+复杂搜索中要搜索的字段照样放在common.js中，如下：
+```javascript
+const user = { column: props => [id, name, email, mobile, thumb, createTime, updateTime, action(props)], field: [name, email, mobile, thumb], searchField: [name, email, mobile, createTime] }
+```
+引用并使用：
+```javascript
+import { user, pageSet } from './../../../columns'
+<AddComp
+  field={user.field}
+  showAdd={showAdd}
+  onAddData={this.addUser.bind(this)}
+  title={route.title}/>
+```
+
+SearchComp组件：
+```javascript
+import React, { Component } from 'react'
+import { Tabs, Input, Button, DatePicker } from 'antd'
+const { TabPane } = Tabs
+const { Search } = Input
+const { RangePicker } = DatePicker
+import style from './../static/css/index.pcss'
+import { Type } from 'utils'
+
+class SearchComp extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      moreSearch: true, // 显示更多搜索
+      timeSpan: [{ name: 'today', title: '今天' },
+        { name: 'yesterday', title: '昨天' },
+        { name: 'currentMonth', title: '本月' },
+        { name: 'lastMonth', title: '上月' }],
+      searchObj: {}
+    }
+  }
+  componentDidMount() {
+  }
+  // 搜索条件
+  setSearchState(event, column) {
+    let { searchObj } = this.state
+    if (event.type === 'time') {
+      if (column[0]) {
+        searchObj[`${event.dataIndex}Start`] = column[0].format('YYYY-MM-DD hh:mm')
+      } else {
+        delete searchObj[`${event.dataIndex}Start`]
+      }
+      if (column[1]) {
+        searchObj[`${event.dataIndex}End`] = column[1].format('YYYY-MM-DD hh:mm')
+      } else {
+        delete searchObj[`${event.dataIndex}End`]
+      }
+    } else {
+      if (event.target.value) {
+        searchObj[event.target.name] = event.target.value
+      } else {
+        delete searchObj[event.target.name]
+      }
+    }
+    this.setState(searchObj)
+  }
+  // 简单搜索，默认搜索第一个字段
+  searchKeyword(value) {
+    let searchObj = {}
+    let { searchField } = this.props
+    if (searchField.length > 0) {
+      searchObj[searchField[0].key] = value
+      this.onSearch(searchObj)
+    }
+  }
+  // 回车搜索
+  searchEnterKeyword(e) {
+    if (e.target.value) {
+      let searchObj = {}
+      let { searchField } = this.props
+      if (searchField.length > 0) {
+        searchObj[searchField[0].key] = e.target.value
+        this.onSearch(searchObj)
+      }
+    }
+  }
+  // 条件搜索
+  searchClick() {
+    let { searchObj } = this.state
+    this.onSearch(searchObj)
+  }
+  // 触发父组件搜索
+  onSearch(searchObj) {
+    this.props.onSearch(searchObj)
+  }
+  // 添加，触发父组件，弹出添加框
+  popUpAdd() {
+    this.props.onAdd()
+  }
+  getSearchItem = () => {
+    let { searchField } = this.props
+    return (<div className={style.searchItem}>
+      {searchField.map((s, index) => {
+        if (s.type === 'input') { // 文本框
+          return <div key={s.key}>
+            <label htmlFor={s.key}>{s.title}</label>
+            <Input name={s.key} id={s.key} allowClear placeholder={s.title} onChange={this.setSearchState.bind(this)} className={style.itemInput}/>
+          </div>
+        } else if (s.type === 'time') { // 时间搜索
+          return <div key={s.key}>
+            <label htmlFor={s.key}>{s.title}</label>
+            <RangePicker name={s.key} id={s.key} allowClear onChange={ this.setSearchState.bind(this, s) } className={style.itemInput}/>
+          </div>
+        } else {
+          return null
+        }
+      })}
+      <div key='submit-button'>
+        <Button>重置</Button>
+        <Button type="primary" className={style.commonMarginLeft} onClick={this.searchClick.bind(this)}>搜索</Button>
+      </div>
+    </div>)
+  }
+
+  render() {
+    let { timeSpan, moreSearch } = this.state
+    let { onAdd } = this.props
+    return (<div>
+      <div className={style.search}>
+        <Tabs>{ timeSpan.map((t, i) => <TabPane tab={t.title} key={i}/>) }</Tabs>
+        <div className={style.searchBox}>
+          <Search
+            allowClear
+            className={style.itemInput}
+            placeholder="请输入关键字"
+            onPressEnter={this.searchEnterKeyword.bind(this)}
+            onSearch={this.searchKeyword.bind(this)}/>
+          <Button
+            onClick={() => this.setState({ moreSearch: !moreSearch })}
+            icon="search"
+            className={style.commonMarginLeft}/>
+          {Type.isFunction(onAdd) ? <Button
+            onClick={this.popUpAdd.bind(this)}
+            className={style.commonMarginLeft}
+            type="primary"
+            icon="plus"/> : null}
+        </div>
+      </div>
+      {moreSearch ? this.getSearchItem() : null}
+    </div>)
+  }
+}
+export default SearchComp
+```
+这里使用onChange方法来收集搜索数据，原理是给Input组件设置name，值是key，也就是字段名，onChange方法中，使用event.target.name获取字段名字，使用event.target.value获取Input的输入值，这样组成搜索数据searchObj，最后把searchObj返回给父组件。
+
+未解决问题：
+* 时间搜索一般是一个时间段，这个暂时没有实现。
+* 如果搜索条件是一个下拉框选择出来的，这个要给条件渲染成下拉框，这个暂时没有实现。
+
+
+
