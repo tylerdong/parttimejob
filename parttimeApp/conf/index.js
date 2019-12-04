@@ -2,8 +2,7 @@ module.exports = {
     mysql: {
         host: 'localhost',
         user: 'root',
-        password: 'qwerqwer',
-        // password: '-@fhua&$',
+        password: '123',
         database:'dbpart',
         timezone: 'local',
         // 最大连接数，默认为10
