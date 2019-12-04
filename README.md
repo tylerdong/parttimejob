@@ -8,7 +8,7 @@
 前端基于框架[React-Admin-Starter](https://github.com/veryStarters/react-admin-starter)基本没有改动。这是一个后台管理系统，最常用的功能也就是增删改查，这里做了一些自己的调整。
 
 ### 统一的字段名
-开发PC端这种后台项目，产品经理经常会提一些比较临时需求。比如原型上一个表格字段“编辑时间”，做到一般快结尾了或者已经快上线了，说要改成“更新时间”。这个时候就比较蛋疼了，当然最直接的办法就是Ctrl+H全局查找，一个一个替换，但是遇到新手连编辑器都不是很熟的小伙伴就要捉急了（我见过一些刚入门的小伙子，用的是vscode，还真不知道全局查找，快速跳转这些快捷键）。
+开发PC端这种后台项目，产品经理经常会提一些临时需求。比如原型上一个表格字段“编辑时间”，做到一般快结尾了或者已经快上线了，说要改成“更新时间”。这个时候就比较蛋疼了，当然最直接的办法就是Ctrl+H全局查找，一个一个替换，但是遇到新手连编辑器都不是很熟的小伙伴就要捉急了（我见过一些刚入门的小伙子，用的是vscode，还真不知道全局查找，快速跳转这些快捷键）。
 前端项目中使用的是ant.design for react，table有两个地方需要注意，数据源和显示列名：
 ```javascript
 // 数据源
@@ -349,5 +349,111 @@ export default SearchComp
 * 时间搜索一般是一个时间段，这个暂时没有实现。
 * 如果搜索条件是一个下拉框选择出来的，这个要给条件渲染成下拉框，这个暂时没有实现。
 
+### mock数据和代理跨域
+原框架提供自动生成mock文件的功能，项目启动后使用express启用了http应用（parttime\scripts\addone\mock-server.js），端口是10086，专门监听mock请求，在fetch（parttime\src\common\utils\fetch.js），proxyTable（parttime\src\rasConfig.js）中代理。如果不想走mock，就修改代理的target。不过上项目之后很少使用mock，增加了工作量不是？再说已经全栈开发了还要mock个啥呢？
 
+## 后端parttimeApp
 
+后端开发采用的express，mysql.js，pug实现的，注意这里主要写接口，pug模板基本上没有用到。这个子项目基本上是按照官方文档来写的。
+使用express-generator来生成项目骨架，express的模板引擎好多，也不知道那个好，就按照官方文档中的例子给个pug来生成项目。项目中有个www文件，是启动文件，可以直接运行这个文件启动。
+
+要访问接口要添加中间件body-parser，因为post，put，patch三种请求中包含请求提，node.js原生的http模块中，请求提是基于流的方式来接受，body-parser可以解析JSON，Raw，文本，URL-encoded格式的请求体。
+
+```javascript
+var bodyParser = require('body-parser');
+//解析 application/json
+app.use(bodyParser.json());
+//解析 application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+//转发api/base请求
+app.use('/api/base', indexRouter);
+//转发api/user请求
+app.use('/api/user', usersRouter);
+```
+
+在usersRouter就是具体的接口请求了，如下：
+```javascript
+var express = require('express');
+var router = express.Router();
+var config = require('./../conf/index')
+
+/* GET users listing. */
+router.get('/', function (req, res, next) {
+    res.send('respond with a resource');
+});
+```
+
+这里简单的分了个层，和java，.net代码一样有router层（相当于业务逻辑层），dao层（数据访问层）。dao层里使用mysql.js访问mysql数据库。
+这个地方说一下分页的逻辑，分页查询使用的是limit offset，pageSize方式，但是有个重要的信息要返回，就是数据行数，所以需要执行两次请求，这就意味这要使用回调嵌套了，这就不是很爽了，代码会成一坨。所幸mysql.js生成连接池的时候有个选项multipleStatements，把它设置成true，就可以一次执行两个sql语句，有点类似存储过程。
+
+查询接口一般是select column1，column2 ... from table where column1=value1 and column2=value2 ... order by updateTime desc limit offset, pageSize，这样的，为了避免每次都拼接sql语句，这里写了一个统一处理函数，另外还使用current，pageSize生成offSet。
+接口请求中出列current，pageSize，current字段之外的字段默认都是需要查询的字段，使用for...of方法轮询查询对象，生成where后缀。方法如下：
+
+```javavscript
+    paging: (sql, param) => {
+        // 如果请求中有pageSize，使用current，pageSize生成offSet
+        if (param.hasOwnProperty('pageSize')) {
+            param.pageSize = parseInt(param.pageSize)
+            param.offSet = param.current <= 1 ? 0 : (param.current - 1) * param.pageSize
+        }
+        for(let key in param) {
+            if(!['pageSize', 'current', 'offSet'].includes(key)) {
+                sql[0]+= ` AND ${key}=:${key}`
+                sql[1]+= ` AND ${key}=:${key}`
+            }
+        }
+        sql[0] += ' ORDER BY updateTime DESC LIMIT :offSet, :pageSize;'
+        sql[1] += ' ORDER BY updateTime DESC;'
+        return {sql: sql.join(''), param: param}
+    }
+```
+
+默认情况下使用?转义，但是我觉得这种情况有点怪，例如select * from t_user where name=? and age=? and sex=?;这样要传入的参数是一个数组，并且要时刻注意数组的顺序和sql语句中?的顺序保持一致，这是不是反人类？所幸mysql.js有提供一个配置queryFormat，自定义转义，代码如下：
+```javascript
+queryFormat: function (sqlString, values) {
+    if (!values) return sqlString;
+    return sqlString.replace(/\:(\w+)/g, function (txt, key) {
+	if (values.hasOwnProperty(key)) {
+	    return this.escape(values[key]);
+	}
+	return txt;
+    }.bind(this))
+}
+```
+这个函数的原理是使用字符串的replace方法将sql语句中的:columnname替换成转义后的请求值，这样写sql语句就方便多了，select * from t_user where name=:name and age=:age and sex=:sex; 还有传入参数的时候就可以直接传入一个对象就好，例如{name: '张三', age: 18, sex: 'man'}，见名知义，岂不是很爽？
+
+未解决问题：
+* 暂时没有考虑like，between，>，<等情况。
+* 这里默认接口请求传入的字段名字和数据库中表的字段名字一致，这是不安全的。
+* 使用multipleStatements设置一次执行多条语句，也不是很安全，会有sql注入危险。
+
+## 部署上线
+
+部署上线首先要有域名和空间，这没啥好说的，就是买买买，不过域名不是必须的。
+服务器我用的是阿里云的Ubuntu，要在里面安装nginx，node.js，npm，mysql，pm2或者forever。
+mysql装好之后命令可以连接，查看，但是这不是影响工作效率，所有要用客户端连接，我用的是navicat for mysql。首先要在阿里云服务器里当前实例的安全组里配置端口访问规则，mysql使用的是3306，截图如下：
+![](https://github.com/tylerdong/parttimejob/blob/master/parttime/public/mysqlConnection.png)
+还要允许root用户从外网登陆，要修改mysql里的user表，这里不再赘述。
+
+使用pm2启动node.js项目，防止因出错造成自动退出。pm2工具的使用就不再赘述。
+
+最后前端使用proxyTable代理解决跨域问题的那一套，部署在服务器上就不管用了，这里没有在后端修改服务器响应头Access-Control-Allow-Origin，而是使用nginx代理，具体做法是使用vhost，将来自localhost:3332/api/路径的请求代理到本地127.0.0.1:3333。具体做法是在nginx的vhost目录下新建一个parttime.conf,内容如下：
+```javascript
+server {
+        listen 3332;                                    # 端口
+        server_name www.hzyayun.net hzyayun.net;        # 域名
+        root /usr/local/app/parttime;                   # 站点根目录
+        index index.html;                               # 默认首页
+        location /api/ {
+                proxy_pass http://127.0.0.1:3333;       # 请求转发的地址
+                proxy_connect_timeout 6000;             # 连接超时设置
+                proxy_read_timeout 6000;
+                proxy_redirect off;                     # 不修改请求url
+        }
+}
+```
+在nginx的配置文件ngxin.conf内修改http对象，在http配置的最后一行跟上include \/etc\/nginx\/vhost\/*.conf; 然后重启nginx。最后还要开放3332，3333两个端口。如下
+![](https://github.com/tylerdong/parttimejob/blob/master/parttime/public/react.png)
+![](https://github.com/tylerdong/parttimejob/blob/master/parttime/public/interfaceconn.png)
+
+最后如果想用域名访问，需要在阿里云上解析域名，需要备案，太麻烦我就没有弄，直接使用域名访问：http://120.27.214.189:3332/
