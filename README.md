@@ -188,6 +188,7 @@ export default AddComp
 同样，搜索也是根据几个字段来查询信息，这里我们可以把搜索分成两种类型：
 * 简单搜索，按照更新时间来搜索，比如昨天，今天，当月，上月，名称搜索，其中昨天，今天，当月，上月做成tab的形式，名称直接输入框，并且回车搜索。这个能满足最普遍的搜索功能。
 * 复杂搜索，简单搜索的基础上加上要搜索的字段。
+
 简单搜索
 ![](https://github.com/tylerdong/parttimejob/blob/master/parttime/public/common.png)
 复杂搜索
