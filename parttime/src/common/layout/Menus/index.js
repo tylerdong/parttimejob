@@ -45,7 +45,7 @@ class MamsMenu extends Component {
       this.setState({ menus: defaultMenus })
       storage.setMenu(defaultMenus)
     }
-    api.getMenus().then(res => {
+    api.user.getMenus().then(res => {
       if (res.success && res.data) {
         this.setState({ menus: res.data })
         storage.setMenu(res.data)

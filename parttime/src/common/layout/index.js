@@ -57,7 +57,7 @@ class MainLayOut extends Component {
     // 退出登陆接口调用
     if (item.key === 'logout') {
       const userInfo = storage.getUser()
-      const res = await api.logout(userInfo)
+      const res = await api.user.logout(userInfo)
       if (res.code === 0 && res.data) {
         storage.setUser('')
         window.location.href = config.loginRoute

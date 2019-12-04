@@ -49,5 +49,5 @@ class AddDataComp extends Component {
   }
 }
 
-const AddComp = Form.create({ name: 'horizontal_login' })(AddDataComp)
+const AddComp = Form.create({ name: 'add_comp' })(AddDataComp)
 export default AddComp

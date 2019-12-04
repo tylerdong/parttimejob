@@ -1,6 +1,7 @@
 import storage from './storage'
 import axios from 'axios'
 import config from 'config'
+import { message } from 'antd'
 
 const buildEnv = process.env.BUILD_ENV || 'development'
 let fetcher = axios.create({
@@ -21,12 +22,14 @@ let fetcher = axios.create({
 })
 
 fetcher.interceptors.request.use(function (config) {
+  message.loading('请求中，请稍候')
   return config
 }, function (error) {
   return Promise.reject(error)
 })
 
 fetcher.interceptors.response.use(function (response) {
+  message.destroy()
   return response.data
 }, function (error) {
   return Promise.reject(error)

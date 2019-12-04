@@ -27,7 +27,7 @@ class UserAuth extends Component {
     if (menuData) {
       this.setState({ treeData: menuData })
     } else {
-      api.getMenus().then(res => {
+      api.user.getMenus().then(res => {
         if (res.success && res.data) {
           storage.setMenu(res.data) // 缓存起来
           this.setState({ treeData: res.data })

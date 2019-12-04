@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import storeKit from 'storeKit'
 import api from 'api'
-import { group } from './../../../columns'
-import { message, Table } from 'antd'
+import { group, pageSet } from './../../../columns'
+import { Table } from 'antd'
 import SearchComp from './../../../components/searchComp'
 import AddComp from './../../../components/addDataComp'
 import route from './route'
@@ -17,22 +17,32 @@ class UserRolegroup extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      searchItem: ['id', 'groupName', 'detail', 'createTime'],
       showAdd: false,
-      data: []
+      pageSet: { ...pageSet },
+      search: {}
     }
   }
   componentDidMount() {
     this.initData()
   }
   initData() {
-    this.search()
+    this.onSearch()
   }
-  search(data = {}) {
-    api.getUserRoleGroup({ page: 1, pageSize: 10, ...data }).then(res => {
+  onSearch(data) {
+    if (data) {
+      this.setState({ search: data }, () => this.search())
+    } else {
+      this.search()
+    }
+  }
+  search() {
+    let { pageSet: { current, pageSize }, search } = this.state
+    api.user.getUserRoleGroup({ current, pageSize, ...search }).then(res => {
       if (res.success) {
-        if (res.data && Array.isArray(res.data) && res.data.length > 0) {
-          this.setState({ data: res.data })
+        if (res.data && Array.isArray(res.data.data)) {
+          let { pageSet } = this.state
+          pageSet.total = res.data.total
+          this.setState({ data: res.data.data, pageSet })
         }
       }
     })
@@ -41,13 +51,12 @@ class UserRolegroup extends Component {
     this.setState({ showAdd: show })
   }
   addRoleGroup(data) {
-    message.loading('加载中')
-    api.addRoleGroup(data).then(res => {
+    api.user.addRoleGroup(data).then(res => {
       if (res.success) {
         this.popUpRoleGroup(false)
         this.search()
       }
-    }).finally(() => message.destroy())
+    })
   }
   handleDelete(record) {
     console.log(record)
@@ -56,16 +65,30 @@ class UserRolegroup extends Component {
     console.log(record)
   }
   render() {
-    let { data, showAdd } = this.state
+    let { data, showAdd, pageSet } = this.state
+    let paginationProps = {
+      ...pageSet,
+      onChange: (current, pageSize) => {
+        let { pageSet } = this.state
+        pageSet.current = current
+        this.setState({ pageSet }, () => this.onSearch())
+      },
+      onShowSizeChange: (current, size) => {
+        let { pageSet } = this.state
+        pageSet.pageSize = size
+        this.setState({ pageSet }, () => this.onSearch())
+      }
+    }
     return (<div>
       <SearchComp
         searchField={group.searchField}
         onAdd={this.popUpRoleGroup.bind(this, true)}
-        onSearch={this.search.bind(this)}/>
+        onSearch={this.onSearch.bind(this)}/>
       <Table dataSource={data}
         columns={group.column({ handleDelete: this.handleDelete.bind(this), handleEdit: this.handleEdit.bind(this) })}
         rowKey='id'
         size="middle"
+        pagination={paginationProps}
         bordered/>
       <AddComp field={group.field}
         showAdd={showAdd}

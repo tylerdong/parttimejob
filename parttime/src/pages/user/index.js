@@ -19,7 +19,7 @@ class User extends Component {
     }
   }
   componentDidMount() {
-    api.getUserList({ page: 1, pageSize: 10 }).then(res => {
+    api.user.getUserList({ page: 1, pageSize: 10 }).then(res => {
       if (res.success) {
         if (res.data && Array.isArray(res.data.list) && res.data.list.length > 0) {
           this.setState({ userList: res.data.list })
@@ -27,7 +27,6 @@ class User extends Component {
       }
     })
   }
-
   render() {
     let { userList } = this.state
     return (

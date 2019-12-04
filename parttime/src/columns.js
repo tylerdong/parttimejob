@@ -1,6 +1,7 @@
 import React from 'react'
 import { Divider, Icon, Popconfirm } from 'antd'
 import style from './../src/static/css/index.pcss'
+const pageSet = { current: 1, pageSize: 2, total: 0, showQuickJumper: true, showSizeChanger: true, pageSizeOptions: ['2', '10'] }
 const id = { title: 'ID', dataIndex: 'id', key: 'id', type: 'input' }
 const name = { title: '姓名', dataIndex: 'name', key: 'name', type: 'input' }
 const mobile = { title: '手机号', dataIndex: 'mobile', key: 'mobile', type: 'input' }
@@ -32,6 +33,7 @@ const role = { column: props => [id, roleName, detail, updateTime, createTime, a
 const group = { column: props => [id, groupName, detail, updateTime, createTime, action(props)], field: [groupName, detail], searchField: [groupName, detail] }
 
 export {
+  pageSet,
   user,
   role,
   group
