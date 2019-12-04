@@ -28,7 +28,7 @@ const roleName = { title: '角色', dataIndex: 'roleName', key: 'roleName', type
 const groupName = { title: '用户组', dataIndex: 'groupName', key: 'groupName', type: 'input' }
 const detail = { title: '介绍', dataIndex: 'describe', key: 'describe', type: 'input' }
 
-const user = { column: props => [id, name, email, mobile, thumb, createTime, updateTime, action(props)], field: [name, email, mobile, thumb], searchField: [name, email, mobile, thumb] }
+const user = { column: props => [id, name, email, mobile, thumb, createTime, updateTime, action(props)], field: [name, email, mobile, thumb], searchField: [name, email, mobile, createTime] }
 const role = { column: props => [id, roleName, detail, updateTime, createTime, action(props)], field: [roleName, detail], searchField: [roleName, detail] }
 const group = { column: props => [id, groupName, detail, updateTime, createTime, action(props)], field: [groupName, detail], searchField: [groupName, detail] }
 

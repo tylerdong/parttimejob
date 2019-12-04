@@ -17,6 +17,8 @@ export default {
     getUserInfo: param => fetch('/user/info', param),
     // 添加用户
     addUser: param => fetch('/user/add', param, { method: 'post' }),
+    // 删除用户
+    deleteUser: param => fetch('/user/delete', param, { method: 'post' }),
     // 获取APP初始化信息，包含权限等内容
     getInitState: param => fetch('/base/initState', param, { method: 'get' }),
     // 用户角色

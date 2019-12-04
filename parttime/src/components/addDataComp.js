@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Form, Modal, Input, message } from 'antd'
-// import style from './../static/css/index.pcss'
 
 class AddDataComp extends Component {
   constructor(props) {

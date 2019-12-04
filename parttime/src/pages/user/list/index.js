@@ -58,7 +58,11 @@ class UserList extends Component {
     })
   }
   handleDelete(record) {
-    console.log(record)
+    api.user.deleteUser({ id: record.id }).then(res => {
+      if (res.success) {
+        this.search()
+      }
+    })
   }
   handleEdit(record) {
     console.log(record)
