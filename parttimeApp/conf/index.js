@@ -8,6 +8,8 @@ module.exports = {
         timezone: 'local',
         // 最大连接数，默认为10
         connectionLimit: 10,
+        // 允许执行多条语句
+        multipleStatements: true,
         queryFormat: function (sqlString, values) {
             if (!values) return sqlString;
             return sqlString.replace(/\:(\w+)/g, function (txt, key) {
@@ -18,11 +20,19 @@ module.exports = {
             }.bind(this))
         }
     },
-    paging: query => {
-        if (query.hasOwnProperty('pageSize'))  {
-            query.pageSize = parseInt(query.pageSize)
-            query.offSet = query.page <= 1 ? 0 : (query.page - 1) * query.pageSize
+    paging: (sql, param) => {
+        if (param.hasOwnProperty('pageSize')) {
+            param.pageSize = parseInt(param.pageSize)
+            param.offSet = param.current <= 1 ? 0 : (param.current - 1) * param.pageSize
         }
-        return query
+        for(let key in param) {
+            if(!['pageSize', 'current', 'offSet'].includes(key)) {
+                sql[0]+= ` AND ${key}=:${key}`
+                sql[1]+= ` AND ${key}=:${key}`
+            }
+        }
+        sql[0] += ' ORDER BY updateTime DESC LIMIT :offSet, :pageSize;'
+        sql[1] += ' ORDER BY updateTime DESC;'
+        return {sql: sql.join(''), param: param}
     }
 }

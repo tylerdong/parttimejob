@@ -32,11 +32,11 @@ router.get('/menus', function (req, res, next) {
 
 // 分页查询用户
 router.get('/list', function (req, res, next) {
-    daoUser.list(config.paging(req.query), data => res.json(result.createResult(true, data)))
+    daoUser.list(req.query, data => res.json(result.createResult(true, data)))
 });
 
 // 添加用户
-router.post('/addUser', function (req, res, next) {
+router.post('/add', function (req, res, next) {
     // 从请求中获得参数
     daoUser.addUser(req.body, function (data) {
         res.json(result.createResult(true, data))
@@ -45,7 +45,7 @@ router.post('/addUser', function (req, res, next) {
 
 // 分页查询角色
 router.get('/role/list', (req, res, next) => {
-    daoUser.roleList(config.paging(req.query),data => res.json(result.createResult(true, data)))
+    daoUser.roleList(req.query,data => res.json(result.createResult(true, data)))
 })
 
 // 添加角色
@@ -53,10 +53,11 @@ router.post('/role/add', (req, res, next) => {
     daoUser.addRole(req.body, data => res.json(result.createResult(true, data)))
 })
 
+// 删除角色
+router.post('/role/delete', (req, res, next) => daoUser.deleteRole(req.body, data => res.json(result.createResult(true, data))))
+
 // 查找角色组
-router.get('/role/group', (req, res, next) => {
-    daoUser.roleGroupList(req.body, data => res.json(result.createResult(true, data)))
-})
+router.get('/role/group', (req, res, next) => daoUser.roleGroupList(req.query, data => res.json(result.createResult(true, data))))
 
 // 添加角色组
 router.post('/role/group/add', (req, res, next) => {
