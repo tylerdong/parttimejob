@@ -47,6 +47,5 @@ class AddDataComp extends Component {
     </Modal>
   }
 }
-
 const AddComp = Form.create({ name: 'add_comp' })(AddDataComp)
 export default AddComp

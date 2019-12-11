@@ -18,10 +18,8 @@ class SearchComp extends Component {
       searchObj: {}
     }
   }
-
   componentDidMount() {
   }
-
   // 搜索条件
   setSearchState(event, column) {
     let { searchObj } = this.state
@@ -45,7 +43,6 @@ class SearchComp extends Component {
     }
     this.setState(searchObj)
   }
-
   // 简单搜索，默认搜索第一个字段
   searchKeyword(value) {
     let searchObj = {}
@@ -55,7 +52,6 @@ class SearchComp extends Component {
       this.onSearch(searchObj)
     }
   }
-
   // 回车搜索
   searchEnterKeyword(e) {
     if (e.target.value) {
@@ -72,17 +68,14 @@ class SearchComp extends Component {
     let { searchObj } = this.state
     this.onSearch(searchObj)
   }
-
   // 触发父组件搜索
   onSearch(searchObj) {
     this.props.onSearch(searchObj)
   }
-
   // 添加，触发父组件，弹出添加框
   popUpAdd() {
     this.props.onAdd()
   }
-
   getSearchItem = () => {
     let { searchField } = this.props
     return (<div className={style.searchItem}>
@@ -107,7 +100,6 @@ class SearchComp extends Component {
       </div>
     </div>)
   }
-
   render() {
     let { timeSpan, moreSearch } = this.state
     let { onAdd } = this.props
@@ -136,5 +128,4 @@ class SearchComp extends Component {
     </div>)
   }
 }
-
 export default SearchComp

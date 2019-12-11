@@ -16,7 +16,7 @@ export default {
       development: '/api',
       test: '//test-api.xxx.com',
       pre: '//pre-api.xxx.com',
-      production: 'http://120.27.214.189:3333/api'
+      production: '/api'
     }
   },
   // 如无前线要求，可直接在此配置侧边栏菜单

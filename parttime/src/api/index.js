@@ -21,6 +21,8 @@ export default {
     deleteUser: param => fetch('/user/delete', param, { method: 'post' }),
     // 获取APP初始化信息，包含权限等内容
     getInitState: param => fetch('/base/initState', param, { method: 'get' }),
+    // 上传单个文件
+    uploadSingleFile: () => fetch('/base/singleFile', { method: 'post' }),
     // 用户角色
     getUserRole(param) {
       return fetch('/user/role/list', param)
