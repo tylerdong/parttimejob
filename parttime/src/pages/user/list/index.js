@@ -99,6 +99,7 @@ class UserList extends Component {
           field={user.field}
           showAdd={showAdd}
           onAddData={this.addUser.bind(this)}
+          onClose={this.popAddUser.bind(this, false)}
           title={route.title}/>
       </div>
     )

@@ -93,6 +93,7 @@ class UserRolegroup extends Component {
       <AddComp field={group.field}
         showAdd={showAdd}
         onAddData={this.addRoleGroup.bind(this)}
+        onClose={this.popUpRoleGroup.bind(this, false)}
         title={route.title}/>
     </div>)
   }
