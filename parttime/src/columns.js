@@ -6,7 +6,7 @@ const id = { title: 'ID', dataIndex: 'id', key: 'id', type: 'input' }
 const name = { title: '姓名', dataIndex: 'name', key: 'name', type: 'input' }
 const mobile = { title: '手机号', dataIndex: 'mobile', key: 'mobile', type: 'input' }
 const email = { title: '邮箱', dataIndex: 'email', key: 'email', type: 'input' }
-const thumb = { title: '头像', dataIndex: 'thumb', key: 'thumb', render: src => <img alt='' src={ src }/>, type: 'img', accept: 'image/gif, image/jpeg', size: 2 }
+const thumb = { title: '头像', dataIndex: 'thumb', key: 'thumb', render: src => <img alt='' src={ src }/>, type: 'file', accept: 'image/gif,image/jpeg', size: 2 }
 const createTime = { title: '创建时间', dataIndex: 'createTime', key: 'createTime', type: 'time' }
 const updateTime = { title: '更新时间', dataIndex: 'updateTime', key: 'updateTime', type: 'time' }
 const action = props => {

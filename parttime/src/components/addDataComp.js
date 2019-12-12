@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Modal, Input, message, Upload, Icon } from 'antd'
+import { Form, Modal, Input, message, Upload, Icon, Button } from 'antd'
 let FormItem = Form.Item
 
 class AddDataComp extends Component {
@@ -7,7 +7,12 @@ class AddDataComp extends Component {
     super(props)
     this.state = {
       showAdd: false,
-      upload: { loading: false, imageUrl: '', data: { fileLocation: 'user' }, headers: { 'Content-Type': 'application/x-www-form-urlencoded' }}
+      upload: {
+        loading: false,
+        imageURL: '',
+        data: { fileLocation: 'user' },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      }
     }
   }
   componentWillReceiveProps(nextProps, nextContext) {
@@ -17,55 +22,79 @@ class AddDataComp extends Component {
   hideModel() {
     this.props.onClose()
   }
-  beforeFileUpload(file) {
-    // TODO
+  beforeFileUpload({ dataIndex, accept, size }, file) {
+    let typeCheck = accept.split(',').includes(file.type)
+    let sizeCheck = file.size / 1024 / 1024 <= size
+    if (!typeCheck) { message.error('文件格式不正确') }
+    if (!sizeCheck) { message.error(`文件不能超过${size}m`) }
+    let checkSuccess = typeCheck && sizeCheck
+    // 加载状态
+    if (checkSuccess) {
+      let { upload } = this.state
+      upload.loading = true
+      this.setState({ upload })
+    }
+    return checkSuccess
   }
   handleFileChange(info) {
-    // TODO
+    let file = info.file
+    if (file.response && file.response.success && file.response.data && file.response.data.path) {
+      let { upload } = this.state
+      upload.imageURL = `http://localhost:3333/upload/${file.response.data.path}`
+      upload.loading = false
+      this.setState({ upload })
+    }
+  }
+  normFile(e) {
+    console.log(e)
   }
   // 确认，调用父组件，添加数据
-  confirmForm() {
+  confirmForm(e) {
+    e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (err) {
-        message.error(err)
+        return message.error(err)
       }
-      this.props.onAddData(values)
+      console.log(values)
+      // this.props.onAddData(values)
     })
   }
   render() {
-    let { showAdd, upload: { loading, imageUrl, data, headers }} = this.state
+    let { showAdd, upload: { loading, imageURL, data, headers }} = this.state
     let { field, title, form: { getFieldDecorator }} = this.props
-    const formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 18 }}
-    const uploadButton = (<div><Icon type={ loading ? 'loading' : 'plus'} /><div className="ant-upload-text">Upload</div></div>)
+    let formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 18 }}
+    let tailFormLayout = { wrapperCol: { xs: { span: 18, offset: 6 }, sm: { span: 18, offset: 6 }}}
+    let uploadButton = (<div><Icon type={ loading ? 'loading' : 'plus'} /><div className="ant-upload-text">上传</div></div>)
+
     return <Modal
+      footer={null}
       visible={showAdd}
       title={'添加' + title}
       data={data}
       centered
-      onCancel={this.hideModel.bind(this)}
-      onOk={this.confirmForm.bind(this)}>
-      <Form {...formItemLayout}>
+      onCancel={this.hideModel.bind(this)}>
+      <Form onSubmit={this.confirmForm.bind(this)} {...formItemLayout}>
         {field.map((f, index) => {
           switch (f.type) {
-            case 'img':
+            case 'file':
               return <FormItem
                 name='file'
                 headers={headers}
                 key={f.key}
                 label={f.title}>
-                {getFieldDecorator(f.key, {
-                  validateTrigger: ['onChange', 'onBlur'],
-                  rules: [{ required: true, whitespace: true, message: `请上传${f.title}` }]
-                })(<Upload
-                  name="file"
-                  data={data}
-                  listType="picture-card"
-                  showUploadList={false}
-                  action="http://localhost:3332/api/base/singleFile"
-                  beforeUpload={this.beforeFileUpload.bind(this)}
-                  onChange={this.handleFileChange.bind(this)}>
-                  {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                </Upload>)}
+                {getFieldDecorator(f.key)(<div>
+                  <Upload
+                    name="file"
+                    accept={f.accept}
+                    data={data}
+                    listType="picture-card"
+                    showUploadList={false}
+                    action="http://localhost:3332/api/base/singleFile"
+                    beforeUpload={this.beforeFileUpload.bind(this, f)}
+                    onChange={this.handleFileChange.bind(this)}>
+                    {imageURL ? <img src={imageURL} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                  </Upload>
+                </div>)}
               </FormItem>
             default:
               return <FormItem key={f.key} label={f.title}>
@@ -76,6 +105,9 @@ class AddDataComp extends Component {
               </FormItem>
           }
         })}
+        <FormItem { ...tailFormLayout}>
+          <Button type="primary" htmlType="submit">确定</Button>
+        </FormItem>
       </Form>
     </Modal>
   }

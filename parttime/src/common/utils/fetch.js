@@ -42,17 +42,17 @@ export default async (url = '', params = {}, option = {}) => {
   // 默认get请求
   let method = option.method || 'get'
   let prefixName = option.prefixName || 'otherDomain'
-  console.log(prefixName)
+  // console.log(prefixName)
   // 不指定服务器地址
-  console.log(url)
+  // console.log(url)
   if (url.indexOf('http') !== 0) {
     let baseUrl = config.baseUrl[prefixName]
-    console.log(baseUrl)
+    // console.log(baseUrl)
     if (typeof baseUrl === 'object') {
       baseUrl = baseUrl[buildEnv]
     }
     url = baseUrl + url
-    console.log(url)
+    // console.log(url)
   }
   switch (method) {
     case 'get':
