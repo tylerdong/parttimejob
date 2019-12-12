@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Form, Modal, Input, message, Upload, Icon, Button } from 'antd'
+import { Type } from 'utils'
 let FormItem = Form.Item
 
 class AddDataComp extends Component {
@@ -45,8 +46,41 @@ class AddDataComp extends Component {
       this.setState({ upload })
     }
   }
-  normFile(e) {
-    console.log(e)
+  customerValidator(field, rule, value, callback) {
+    let message = ''
+    if (field.required) {
+      if (value) {
+        if (Type.isRegExp(field.validExp)) {
+          if (!field.validExp.test(value)) {
+            if (Type.isString(field.validMsg)) {
+              message = field.validMsg
+            } else {
+              message = '输入格式不正确'
+            }
+          } else {
+            message = '输入格式不正确'
+          }
+        } else {
+          message = '输入格式不正确'
+        }
+      } else {
+        message = `请输入${field.title}`
+      }
+    } else if (value) {
+      if (Type.isRegExp(field.validExp)) {
+        if (!field.validExp.test(value)) {
+          message = field.validMsg
+        }
+      }
+      if (/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im.test(value)) {
+        message = '非法字符'
+      }
+    }
+    if (message) {
+      callback(message)
+    } else {
+      callback()
+    }
   }
   // 确认，调用父组件，添加数据
   confirmForm(e) {
@@ -65,7 +99,6 @@ class AddDataComp extends Component {
     let formItemLayout = { labelCol: { span: 6 }, wrapperCol: { span: 18 }}
     let tailFormLayout = { wrapperCol: { xs: { span: 18, offset: 6 }, sm: { span: 18, offset: 6 }}}
     let uploadButton = (<div><Icon type={ loading ? 'loading' : 'plus'} /><div className="ant-upload-text">上传</div></div>)
-
     return <Modal
       footer={null}
       visible={showAdd}
@@ -97,10 +130,7 @@ class AddDataComp extends Component {
               </FormItem>
             default:
               return <FormItem key={f.key} label={f.title}>
-                {getFieldDecorator(f.key, {
-                  validateTrigger: ['onChange', 'onBlur'],
-                  rules: [{ required: true, whitespace: true, message: `${f.title}不能为空` }],
-                })(<Input placeholder={'请输入' + f.title}/>)}
+                {getFieldDecorator(f.key, { rules: [{ validator: this.customerValidator.bind(this, f) }] })(<Input placeholder={'请输入' + f.title}/>)}
               </FormItem>
           }
         })}
