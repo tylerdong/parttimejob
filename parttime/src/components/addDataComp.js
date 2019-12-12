@@ -70,7 +70,6 @@ class AddDataComp extends Component {
       footer={null}
       visible={showAdd}
       title={'添加' + title}
-      data={data}
       centered
       onCancel={this.hideModel.bind(this)}>
       <Form onSubmit={this.confirmForm.bind(this)} {...formItemLayout}>
