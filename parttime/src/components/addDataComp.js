@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Form, Modal, Input, message, Upload, Icon, Button } from 'antd'
 import { Type } from 'utils'
+import config from 'config'
 let FormItem = Form.Item
 
 class AddDataComp extends Component {
@@ -37,43 +38,34 @@ class AddDataComp extends Component {
     }
     return checkSuccess
   }
-  handleFileChange(info) {
+  handleFileChange(field, info) {
     let file = info.file
     if (file.response && file.response.success && file.response.data && file.response.data.path) {
       let { upload } = this.state
-      upload.imageURL = `http://localhost:3333/upload/${file.response.data.path}`
-      upload.loading = false
+      upload.imageURL = `${config.baseUrl.resource.upload}${file.response.data.path}`
+      // 为Form对应的字段设置值
+      this.props.form.setFieldsValue({ [`${field.key}`]: file.response.data.path })
       this.setState({ upload })
+      upload.loading = false
     }
   }
   customerValidator(field, rule, value, callback) {
     let message = ''
-    if (field.required) {
-      if (value) {
-        if (Type.isRegExp(field.validExp)) {
-          if (!field.validExp.test(value)) {
-            if (Type.isString(field.validMsg)) {
-              message = field.validMsg
-            } else {
-              message = '输入格式不正确'
-            }
+    if (value && /[`~!#$%^&*()_+<>?:"{},\/;'[\]]/im.test(value)) {
+      message = '非法字符'
+    }
+    if (field.required && !value) {
+      message = `请输入${field.title}`
+    }
+    if (field.required && value) {
+      if (Type.isRegExp(field.validExp)) {
+        if (!field.validExp.test(value)) {
+          if (Type.isString(field.validMsg)) {
+            message = field.validMsg
           } else {
             message = '输入格式不正确'
           }
-        } else {
-          message = '输入格式不正确'
         }
-      } else {
-        message = `请输入${field.title}`
-      }
-    } else if (value) {
-      if (Type.isRegExp(field.validExp)) {
-        if (!field.validExp.test(value)) {
-          message = field.validMsg
-        }
-      }
-      if (/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im.test(value)) {
-        message = '非法字符'
       }
     }
     if (message) {
@@ -89,8 +81,7 @@ class AddDataComp extends Component {
       if (err) {
         return message.error(err)
       }
-      console.log(values)
-      // this.props.onAddData(values)
+      this.props.onAddData(values)
     })
   }
   render() {
@@ -123,7 +114,7 @@ class AddDataComp extends Component {
                     showUploadList={false}
                     action="http://localhost:3332/api/base/singleFile"
                     beforeUpload={this.beforeFileUpload.bind(this, f)}
-                    onChange={this.handleFileChange.bind(this)}>
+                    onChange={this.handleFileChange.bind(this, f)}>
                     {imageURL ? <img src={imageURL} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
                   </Upload>
                 </div>)}

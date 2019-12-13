@@ -17,6 +17,9 @@ export default {
       test: '//test-api.xxx.com',
       pre: '//pre-api.xxx.com',
       production: '/api'
+    },
+    resource: {
+      upload: 'http://localhost:3333/upload/' // 文件上传目录
     }
   },
   // 如无前线要求，可直接在此配置侧边栏菜单
