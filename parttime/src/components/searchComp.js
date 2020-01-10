@@ -24,16 +24,9 @@ class SearchComp extends Component {
   setSearchState(event, column) {
     let { searchObj } = this.state
     if (event.type === 'time') {
-      if (column[0]) {
-        searchObj[`${event.dataIndex}Start`] = column[0].format('YYYY-MM-DD hh:mm')
-      } else {
-        delete searchObj[`${event.dataIndex}Start`]
-      }
-      if (column[1]) {
-        searchObj[`${event.dataIndex}End`] = column[1].format('YYYY-MM-DD hh:mm')
-      } else {
-        delete searchObj[`${event.dataIndex}End`]
-      }
+      searchObj[`${event.dataIndex}`] = column.map(c => {
+        return c ? c.format('YYYY-MM-DD hh:mm') : ''
+      })
     } else {
       if (event.target.value) {
         searchObj[event.target.name] = event.target.value

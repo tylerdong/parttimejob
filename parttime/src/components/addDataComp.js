@@ -112,7 +112,7 @@ class AddDataComp extends Component {
                     data={data}
                     listType="picture-card"
                     showUploadList={false}
-                    action="http://localhost:3332/api/base/singleFile"
+                    action="http://120.27.214.189:3332/api/base/singleFile"
                     beforeUpload={this.beforeFileUpload.bind(this, f)}
                     onChange={this.handleFileChange.bind(this, f)}>
                     {imageURL ? <img src={imageURL} alt="avatar" style={{ width: '100%' }} /> : uploadButton}

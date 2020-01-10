@@ -20,12 +20,12 @@ router.get('/initState', function (req, res, next) {
 // 文件上传
 router.post('/singleFile', upload.single('file'), function (req, res, next) {
   if(req.body.fileLocation) {
-    const newName = req.file.path.replace(/\\tmp/, '\\' + req.body.fileLocation) + path.parse(req.file.originalname).ext
+    const newName = req.file.path.replace(/tmp/, req.body.fileLocation) + path.parse(req.file.originalname).ext
+    const fileName = req.file.filename + path.parse(req.file.originalname).ext
     fs.rename(req.file.path, newName, err => {
       if (err) {
         res.json(result.createResult(false, { message: err.message }))
       } else {
-        let fileName = newName.split('\\').pop()
         res.json(result.createResult(true, { path: `${req.body.fileLocation}/${fileName}` }))
       }
     })

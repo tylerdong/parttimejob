@@ -26,9 +26,10 @@ module.exports = {
             param.offSet = param.current <= 1 ? 0 : (param.current - 1) * param.pageSize
         }
         for(let key in param) {
+            if(param)
             if(!['pageSize', 'current', 'offSet'].includes(key)) {
-                sql[0]+= ` AND ${key}=:${key}`
-                sql[1]+= ` AND ${key}=:${key}`
+                sql[0] += " AND " + key + " LIKE '%" + param[key] + "%'"
+                sql[1] += " AND " + key + " LIKE '%" + param[key] + "%'"
             }
         }
         sql[0] += ' ORDER BY updateTime DESC LIMIT :offSet, :pageSize;'
