@@ -1,16 +1,11 @@
-var express = require('express');
-var router = express.Router();
-var result = require('./../model/result');
-var path = require('path');
-var fs = require('fs');
-var multer = require('multer');
+const express = require('express');
+const router = express.Router();
+const result = require('./../model/result');
+const path = require('path');
+const fs = require('fs');
+const multer = require('multer');
 // 指定文件上传路径
-var upload = multer({dest: path.join(__dirname, './../public/upload/tmp')});
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+const upload = multer({dest: path.join(__dirname, './../public/upload/tmp')});
 
 router.get('/initState', function (req, res, next) {
   let data = { permission: { 1: true, 2: true, 3: false } }

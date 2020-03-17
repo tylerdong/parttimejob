@@ -1,17 +1,17 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const siteRouter = require('./routes/site');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const app = express();
 
-var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
+// 设置渲染引擎
+app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
@@ -24,8 +24,9 @@ app.use(bodyParser.json());
 //解析 application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/api/base', indexRouter);
-app.use('/api/user', usersRouter);
+app.use('/api/base', indexRouter);  // 基本路由
+app.use('/api/user', usersRouter);  // 用户相关
+app.use('/', siteRouter)            // 网站访问
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
