@@ -1,11 +1,78 @@
+@font-face {
+  font-family: 'PingFang_Medium';
+  src: url("./../fonts/PingFang_Medium.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+h1, h2, h3, h4, h5 {
+  margin: 0;
+}
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #fff;
+  font-family: PingFang_Medium, "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
+  font-size: 14px;
 }
-
-a {
-  color: #00B7FF;
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-table.content {
+header ul li a {
+  font-size: 16px;
+}
+header {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e8e8e8;
+}
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
   width: 100%;
 }
+header ul {
+  float: right;
+}
+header ul li {
+  float: left;
+}
+header ul li a {
+  display: inline-block;
+  padding: 0 20px;
+  color: #323333;
+  line-height: 80px;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+header ul li a:hover {
+  animation-name: upDown;
+  animation-timing-function: ease-in-out;
+  animation-duration: 1000ms;
+}
+@keyframes upDown {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}
+header a:hover {
+  color: #CC0000;
+  font-weight: bold;
+}
+header .logo {
+  float: left;
+}
+header .logo h2 {
+  line-height: 80px;
+}
+header .wrap {
+  width: 1200px;
+  margin: 0 auto
+}
+
+
