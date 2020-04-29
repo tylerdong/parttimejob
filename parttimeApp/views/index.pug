@@ -1,4 +1,14 @@
-extends ./includes/layout
-
+extends ./includes/layout.pug
+block append head
+    link(rel="stylesheet", href="./swiper/swiper.min.css")
+    script(src='./js/require.js' data-main='./js/index')
 block content
-    div(class='content')
+    div(class="content-wrap")
+        div(class="swiper-container")
+            div(class="swiper-wrapper")
+                each b in banner
+                    div(class="swiper-slide")
+                        div(style={backgroundImage: 'url("'+ b.bannerImg +'")'})
+                            h3= b.title
+                            p= b.subTitle
+            div(class="swiper-pagination")
